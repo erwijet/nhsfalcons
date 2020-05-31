@@ -145,8 +145,10 @@ function sendRequest(active) {
                         break;
                     case 'treasurer':
                         tag.addClass('is-success').html('treasurer');
+                        break
                     default:
                         tag.addClass('is-light').html('member');
+                        break;
                 }
                 tags.append(tag);
 
@@ -175,11 +177,11 @@ function sendRequest(active) {
 
                 // edit button
                 btn = $('<p>').addClass('control').append(
-                            $('<button>').addClass('button is-small').attr('onclick', `inspectMember('${ doc._id }');`).append(
+                            $('<button>').addClass('button is-small').attr('onclick', `$('#editmember-submit-btn').prop('memberID', '${doc._id}'); $('#editmember-name').val('${doc.name}'); $('#editmember-grade').val(${doc.grade}); $('#editmember-role').val('${doc.position}'); $('#editmember-modal').addClass('is-active');`).append(
                                 $('<span>').addClass('icon is-small').append(
                                     $('<i>').addClass('fas fa-user-edit')
                                 )
-                            ).append($('<spa>').html('Edit'))
+                            ).append($('<span>').html('Edit'))
                         );
                 buttons.append(btn);
 
@@ -259,6 +261,7 @@ function loadInactiveMembers() {
                         break;
                     case 'treasurer':
                         tag.addClass('is-success').html('treasurer');
+                        break;
                     default:
                         tag.addClass('is-light').html('member');
                 }
@@ -307,8 +310,7 @@ function loadInactiveMembers() {
 }
 
 // data validation for new / edit member modal
-function checkMemberNameValidation() {
-    const selector = '#member-name';
+function checkMemberNameValidation(selector) {
     let valid = false;
     // use lambda invocation to break on ANY invalid condition
     (() => {
@@ -334,8 +336,7 @@ function checkMemberNameValidation() {
     return valid;
 }
 
-function checkMemberGradeValidation() {
-    const selector = '#member-grade';
+function checkMemberGradeValidation(selector) {
     let val = $(selector).val();
     val = Math.round(val);
 
@@ -348,22 +349,48 @@ function checkMemberGradeValidation() {
 }
 
 function setupMemberValidation() {
-    $('#member-name').on('input', function () {
-        const selector = '#member-submit-btn';
-        let valid = checkMemberNameValidation();
-        if (valid)
-            $(selector)
-                .removeClass('is-static')
-                .addClass('is-success');
-        else
-            $(selector)
-                .removeClass('is-success')
-                .addClass('is-static');
-    });
+    let selectors = [
+        {name: '#member-name', grade: '#member-grade', btn: '#member-submit-btn'},
+        {name: '#editmember-name', grade: '#editmember-grade', btn: '#editmember-submit-btn'}
+    ];
 
-    $('#member-grade').on('input', function () {
-        checkMemberGradeValidation();
-    })
+    for (let selectPair of selectors) {
+        $(selectPair.name).on('input', function () {
+            let valid = checkMemberNameValidation(selectPair.name);
+            if (valid)
+                $(selectPair.btn)
+                    .removeClass('is-static')
+                    .addClass('is-success');
+            else
+                $(selectPair.btn)
+                    .removeClass('is-success')
+                    .addClass('is-static');
+        });
+
+        $(selectPair.grade).on('input', function () {
+            checkMemberGradeValidation(selectPair.grade);
+        })
+    }
+}
+
+function editMember(id) {
+    if ($('#editmember-submit-btn').hasClass('is-static'))
+        return
+
+    const nameSelect = '#editmember-name';
+    const gradeSelect = '#editmember-grade';
+    const roleSelect = '#editmember-role';
+
+    let name = $(nameSelect).val();
+    let grade = $(gradeSelect).val();
+    let position = $(roleSelect).val().toLowerCase();
+    
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:2020/member/update',
+        data: { filter: { _id: id }, update: { name, grade, position }},
+        success: function () { sendRequest(); sendRequest(); }
+    });
 }
 
 function newMember() {
@@ -382,7 +409,7 @@ function newMember() {
         type: 'POST',
         url: 'http://localhost:2020/member/create',
         data: { name, grade, position },
-        success: sendRequest()
+        success: function () { sendRequest(); sendRequest(); }
     });
 }
 

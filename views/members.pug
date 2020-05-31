@@ -32,6 +32,36 @@ block body
                     .buttons
                         .button.is-outlined.is-info(onclick='$("#import-modal").toggleClass("is-active")') Import
                         .button.is-outlined.is-info Export
+            .modal#editmember-modal
+                .modal-background
+                .modal-card
+                    header.modal-card-head
+                        p.modal-card-title#editmember-title Edit Member
+                    section.modal-card-body
+                        .field
+                            label.label Full Name
+                            .control
+                                input.input#editmember-name(type='text', placeholder='Johnny Appleseed')
+                        .field
+                            label.label Grade
+                            .control
+                                input.input#editmember-grade(type='number', min=11, max=12, value=11)          
+                        .field
+                            label.label Role
+                            .select
+                                select#editmember-role
+                                    option(value='member') Member
+                                    option(value='president') President
+                                    option(value='vice-president') Vice-President
+                                    option(value='secretary') Secretary
+                                    option(value='treasurer') Treasurer
+                        hr
+                        span #[span.tag.is-light Name] must be #[em at least] two words, both capitilized.
+                        br
+                        span #[span.tag.is-light Grade] must be 11 or 12.
+                    footer.modal-card-foot
+                        button.button.is-success#editmember-submit-btn(onclick=`let id = $(this).prop('memberID'); editMember(id);`) Create
+                        button.button(onclick=`$('#editmember-modal').removeClass('is-active');`) Cancel
             .modal#newmember-modal
                 .modal-background
                 .modal-card
