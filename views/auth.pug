@@ -1,0 +1,36 @@
+doctype html
+html
+    head
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700', rel='stylesheet')
+        script(defer, src='https://use.fontawesome.com/releases/v5.13.0/js/all.js')
+        link(rel="stylesheet", href="http://cdn.jsdelivr.net/npm/bulma@latest/css/bulma.css")
+        style.
+            /* hide scrollbar */
+            ::-webkit-scrollbar {
+                display: none;
+            }
+    body
+    .hero.is-light.is-bold.is-fullheight
+            .hero-body
+                .container.has-text-centered
+                    .columns(style='margin: auto 0%')
+                        .column.is-half
+                            img(src='/img/bird.png' width='100px')
+                        .column.is-half
+                            img(src='/img/nhs.png' width='100px')
+                    h1.title Westosha Central NHS Management System
+                    h2.subtitle Please authenticate to continue
+                    form.box#box(method='get', target='_self')
+                        .field.has-addons.is-expanded
+                            .control.has-icons-left.is-expanded
+                                input.input#keybar(type="password", name="guess" placeholder="Key")
+                                span.icon.is-small.is-left
+                                    i.fas.fa-key
+                            .control
+                                button.button.is-dark#submitbtn
+                                    span.icon.is-small
+                                        i.fas.fa-sign-in-alt
+    script(src="https://code.jquery.com/jquery-3.5.0.min.js")
+    script(src='js/auth.js')
+    script(src='js/keep-params.js')

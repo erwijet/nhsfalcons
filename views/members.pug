@@ -1,0 +1,107 @@
+extends layout
+include mixins/loading-mixin
+
+block append css
+    style.
+        .is-vertical-center {
+            display: flex;
+            align-items: center;
+        }
+
+block body
+    .box(style='margin: 1%')
+        nav.level
+            .left-level
+                .level-item
+                    .buttons
+                        .button.is-outlined.is-info(onclick='$("#member-title").html("New Member"); $("#newmember-modal").toggleClass("is-active")')
+                            span.icon
+                                i.fas.fa-user-plus
+                            span Create
+                        .button.is-outlined.is-info(onclick='$("#query-modal").toggleClass("is-active")')
+                            span.icon
+                                i.fas.fa-search
+                            span Search
+                        .button.is-outlined.is-info(onclick='loadInactiveMembers()')
+                            span.icon
+                                i.fas.fa-user-slash
+                            span View Inactive Members
+                            
+            .level-right
+                .level-item
+                    .buttons
+                        .button.is-outlined.is-info(onclick='$("#import-modal").toggleClass("is-active")') Import
+                        .button.is-outlined.is-info Export
+            .modal#newmember-modal
+                .modal-background
+                .modal-card
+                    header.modal-card-head
+                        p.modal-card-title#member-title Loading...
+                    section.modal-card-body
+                        .field
+                            label.label Full Name
+                            .control
+                                input.input#member-name(type='text', placeholder='Johnny Appleseed')
+                        .field
+                            label.label Grade
+                            .control
+                                input.input#member-grade(type='number', min=11, max=12, value=11)          
+                        .field
+                            label.label Role
+                            .select
+                                select#member-role
+                                    option Member
+                                    option President
+                                    option Vice-President
+                                    option Secretary
+                                    option Treasurer
+                        hr
+                        span #[span.tag.is-light Name] must be #[em at least] two words, both capitilized.
+                        br
+                        span #[span.tag.is-light Grade] must be 11 or 12.
+                    footer.modal-card-foot
+                        button.button.is-success.is-static#member-submit-btn(onclick='newMember()') Create
+                        button.button(onclick=`$('#newmember-modal').removeClass('is-active');`) Cancel
+            .modal#query-modal
+                .modal-background
+                .modal-content
+                    .box(style='margin: 1%')
+                        .level(style='margin: 0px')
+                            .level-left
+                                button.button.level-item.is-inverted.is-dark(disabled, style='cursor: auto') Search Conditions:
+                            .level-right
+                                button.button.level-item.is-info.is-inverted(onclick='addCondition()') Add
+                                button.button.is-inverted.is-success#search-button(onclick='sendRequest();') Search
+                        table.table#queries
+                button.modal-close.is-large(aria-label='close', onclick='$("#query-modal").toggleClass("is-active")')
+            .modal#removal-modal
+                .modal-background
+                .modal-card
+                    header.modal-card-head
+                        p.modal-card-title Tag Member as Inactive
+                    section.modal-card-body
+                        p.subtitle
+                        | Are you sure you want to tag #[span.tag.is-light#removal-member] as inactive?
+                        | Marking this member as inactive will hide them from all standard queries.
+                        | This action #[strong is reversable] and non-destructive. To undo, go to #[em Members > View Inactive Members]
+                    footer.modal-card-foot
+                        button.button.is-danger#removal-confirm-button(onclick='tagMemberForRemovalConfirmed()') Tag as Inactive
+                        button.button(onclick=`$('#removal-modal').removeClass('is-active');`) Cancel
+            .modal#import-modal
+                .modal-background
+                .modal-card
+                    header.modal-card-head
+                        p.modal-card-title Import Data
+                        span.delete(onclick='$("#import-modal").toggleClass("is-active")')
+                    section.modal-card-body
+                    footer.modal-card-foot
+                        button.button.is-success.is-static Finish
+                        button.button(onclick='$("#import-modal").toggleClass("is-active")') Close
+        +loadable('main')
+            table.table.is-fullwidth#main-table
+                thead
+                    tr
+                        th Name
+                        th Grade
+                        th Action
+    script(src='/js/members.js')

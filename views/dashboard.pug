@@ -1,0 +1,51 @@
+extends layout
+include mixins/loading-mixin
+
+block append css
+    style.
+        /* hide scrollbar */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .dashboard-metric {
+            color: inherit;
+            background-color: inherit;
+            text-align: center;
+        }
+
+block body
+    .box(style='margin: 1%')
+        .columns
+            each metric in metrics
+                .column.is-one-third
+                    a(href=metric.target)
+                        .button.is-info.is-inverted.is-fullwidth(style='padding: 20%')
+                            .container
+                                -let target = metric.title.replace(' ', '-');
+                                +loadable(target)
+                                    - let metricID = 'metric-' + target;
+                                    h2.subtitle.dashboard-metric= metric.title
+                                    h1.title.dashboard-metric(id=metricID) loading...
+                                script.
+                                    setLoading('#{target}', true);
+    .box.is-fullheight(style='margin: 1%; padding: 6%')
+        -
+            // define tiles at bottom of page to jump to
+            let tiles = [
+                {title: 'Members', subtitle: 'Edit raw user data', target:'/members'}, 
+                {title: 'Tutoring', subtitle: 'Track member tutoring hours and turnout', target:'/tutoring'}, 
+                {title: 'Requirements', subtitle: 'Define and reconcile membership and cord requirements', target: '/reqs'},
+                {title: 'More', target: '/more'}
+            ]
+        -
+        .tile.is-ancestor
+            each tile in tiles
+                .tile.is-parent
+                    // handle redirects in dashboard.js manually vs <a> tag b/c it gets gross
+                    article.goto.tile.is-child.notification.is-info(target=tile.target, style='cursor: pointer')
+                        .content(style='margin: 8% auto')
+                            p.title= tile.title
+                            - tile.subtitle = tile.subtitle || ''; // null validation
+                            p.subtitle= tile.subtitle
+    script(src='/js/dashboard.js')

@@ -1,0 +1,54 @@
+doctype html
+
+html
+    head
+        script(defer, src='https://use.fontawesome.com/releases/v5.3.1/js/all.js')
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700', rel='stylesheet')
+        link(rel="stylesheet", href="http://cdn.jsdelivr.net/npm/bulma@latest/css/bulma.css")
+        block head
+            block css
+    body
+        nav.navbar(style='margin: 0.5%; auto', role='navigation', aria-label='main navigation')
+            .navbar-brand
+                a.navbar-item(href='/')
+                    img(src='/img/bird.png', height='28')
+                a.navbar-item(href='/')
+                    img(src='/img/nhsfalcons.png')
+                a.navbar-burger.burger(role='button', aria-label='menu', aria-expanded='false', data-target='navBar', href='#')
+                    span(aria-hidden='true')
+                    span(aria-hidden='true')
+                    span(aria-hidden='true')
+            #navBar.navbar-menu
+                .navbar-start
+                    a.navbar-item(href='/') Dashboard
+                    a.navbar-item(href='/members') Members
+                    .navbar-item.has-dropdown.is-hoverable
+                        a.navbar-link(href='#') Participation
+                        .navbar-dropdown
+                            a.navbar-item(href='/events') Events
+                            a.navbar-item(href='/tutoring') Tutoring
+                            a.navbar-item(href='/volunteering') Volunteering
+
+        script(src="https://code.jquery.com/jquery-3.5.0.min.js")
+        
+        block body
+        footer.footer.has-background-white(style='padding-bottom: 1%; padding-top: 1%')
+            .content.has-text-centered
+                br
+                .button.is-white.is-hovered.has-background-white(style='cursor: auto')
+                    span #[strong NHS Falcons] was written with&nbsp
+                    span.icon.has-text-danger
+                        i.fas.fa-heart
+                    span &nbspby Tyler
+                br
+                .button.is-white.is-hovered.has-background-white(style='cursor: auto')
+                    span.icon
+                        i.fab.fa-creative-commons-sa 
+                    span.icon
+                        i.fab.fa-github-alt
+                    span.icon
+                        i.fab.fa-node-js
+        
+        script(src='/js/keep-params.js')
+        script(src='/js/layout.js')
