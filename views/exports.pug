@@ -1,0 +1,14 @@
+// generate table for exporting
+
+doctype html
+html
+    body
+        table
+            tr
+                for head in data[0]
+                    th= head
+            - data = data.shift();
+            for row in data
+                tr
+                    for val in row
+                        td= val

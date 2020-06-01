@@ -4,8 +4,10 @@ const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const getJSON = require('get-json'); // load json from url
 const validate = require('./validate');
 const rand = require('./random');
+const json2xml = require('./json2xml');
 const metrics = require('./metrics');
 const PORT = process.env.PORT || 1773;
 
@@ -52,6 +54,12 @@ app.get('/', (req, res) => {
 
 app.get('/showme', (req, res) => {
     res.render('mongoDBCharts');
+});
+
+app.get('/memberXML', (req, res) => {
+    (async () => {
+        getJSON('https://webhooks.mongodb-stitch.com/api/client/v2.0/app/googlesheets-qqzht/service/googlesheet-connect/incoming_webhook/webhook0', (err, json) => res.send(json2xml(json, '  ')));
+    })();
 });
 
 app.get('/members', (req, res) => {
