@@ -26,12 +26,11 @@ block body
                             span.icon
                                 i.fas.fa-user-slash
                             span View Inactive Members
-                            
             .level-right
                 .level-item
                     .buttons
                         .button.is-outlined.is-info(onclick='$("#import-modal").toggleClass("is-active")') Import
-                        .button.is-outlined.is-info Export
+                        .button.is-outlined.is-info(onclick='$("#export-modal").toggleClass("is-active")') Export
             .modal#editmember-modal
                 .modal-background
                 .modal-card

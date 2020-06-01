@@ -50,6 +50,10 @@ app.get('/', (req, res) => {
         res.redirect('/auth');
 });
 
+app.get('/showme', (req, res) => {
+    res.render('mongoDBCharts');
+});
+
 app.get('/members', (req, res) => {
     // if (validate(req))
         res.render('members', {

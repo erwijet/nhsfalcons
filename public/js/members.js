@@ -393,7 +393,7 @@ function editMember(id) {
         type: 'POST',
         url: 'http://localhost:2020/member/update',
         data: { filter: { _id: id }, update: { name, grade, position }},
-        success: function () { sleep(500); sendRequest(); }
+        success: function () { sendRequest(); sendRequest(); }
     });
 }
 
@@ -413,7 +413,7 @@ function newMember() {
         type: 'POST',
         url: 'http://localhost:2020/member/create',
         data: { name, grade, position },
-        success: function () { sleep(500); sendRequest(); }
+        success: function () { sendRequest(); sendRequest(); }
     });
 }
 
