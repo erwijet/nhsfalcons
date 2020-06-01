@@ -5,6 +5,10 @@ const QUERY = [
     ['Equal To', 'Not Equal To']
 ];
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function addCondition() {
     let row = $('<tr>');
 
@@ -389,7 +393,7 @@ function editMember(id) {
         type: 'POST',
         url: 'http://localhost:2020/member/update',
         data: { filter: { _id: id }, update: { name, grade, position }},
-        success: function () { sendRequest(); sendRequest(); }
+        success: function () { sleep(500); sendRequest(); }
     });
 }
 
@@ -409,7 +413,7 @@ function newMember() {
         type: 'POST',
         url: 'http://localhost:2020/member/create',
         data: { name, grade, position },
-        success: function () { sendRequest(); sendRequest(); }
+        success: function () { sleep(500); sendRequest(); }
     });
 }
 
