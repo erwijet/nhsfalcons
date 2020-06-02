@@ -30,7 +30,7 @@ for (let target of $('.goto')) {
 
 $.ajax({
     type: 'POST',
-    url: 'http://localhost:2020/member/query',
+    url: 'http://api.nhsfalcons.com/member/query',
     data: { query: { active: true } }, // pull all active members
     success: function (res) {
         let { docs } = res;
