@@ -58,18 +58,16 @@ app.get('/showme', (req, res) => {
 app.get('/membersTable', (req, res) => {
     (async () => {
         getJSON('https://webhooks.mongodb-stitch.com/api/client/v2.0/app/googlesheets-qqzht/service/googlesheet-connect/incoming_webhook/webhook0', (err, json) => {
-            console.log(json);
             res.render('exports', { data: json })
         });
     })();
 });
 
 app.get('/members', (req, res) => {
-    // if (validate(req))
-        res.render('members', {
-        });
-    // else
-        // res.redirect('/auth');
+    if (validate(req))
+        res.render('members');
+    else
+        res.redirect('/auth');
 });
 
 app.listen(PORT, console.log(`Server listening on port ${PORT}`));
