@@ -16,6 +16,7 @@ html
                 th Member
                 th Note
             for row in data
-                tr
-                    td= row.name
-                    td &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                if row.active
+                    tr
+                        td= row.name
+                        td &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
