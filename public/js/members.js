@@ -121,7 +121,7 @@ function sendRequest(active) {
 
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:2020/member/query',
+        url: 'http://api.nhsfalcons.com/member/query',
         data: { query },
         success: function (data) {
             // load data into table
@@ -221,7 +221,7 @@ function tagMemberForRemovalConfirmed() {
     id = id.substr(0, id.length - 1);
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:2020/member/update',
+        url: 'http://api.nhsfalcons.com/member/update',
         data: { 
             filter: { _id: id }, 
             update: { active: false } 
@@ -237,7 +237,7 @@ function loadInactiveMembers() {
 
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:2020/member/query',
+        url: 'http://api.nhsfalcons.com/member/query',
         data: {query: { active: false }},
         success: function (data) {
             // load data into table
@@ -287,7 +287,7 @@ function loadInactiveMembers() {
                 let btn = $('<p>').addClass('control').append(
                     $('<button>').addClass('button is-small').attr('onclick', `$.ajax({
                         type: 'POST', 
-                        url: 'http://localhost:2020/member/update', 
+                        url: 'http://api.nhsfalcons.com/member/update', 
                         data: {
                             filter: {_id: '${doc._id}'}, 
                             update: { active: true }
@@ -391,7 +391,7 @@ function editMember(id) {
     
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:2020/member/update',
+        url: 'http://api.nhsfalcons.com/member/update',
         data: { filter: { _id: id }, update: { name, grade, position }},
         success: function () { sendRequest(); sendRequest(); }
     });
@@ -411,7 +411,7 @@ function newMember() {
     
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:2020/member/create',
+        url: 'http://api.nhsfalcons.com/member/create',
         data: { name, grade, position },
         success: function () { sendRequest(); sendRequest(); }
     });
