@@ -1,0 +1,70 @@
+extends layout
+include mixins/loading-mixin
+
+block append css
+    style.
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* remove up down arrows on number inputs */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+block body
+    +loadable('main')
+        .is-hidden(id='member-id', value=id)
+        .hero.is-medium.is-bold
+            .hero-body
+                .container
+                    h1.title#member-name
+                    h2.subtitle#member-position
+        .box(style='margin: 1%')
+            table.table.is-fullwidth.is-striped#main-table
+                thead
+                    tr
+                        th Name
+                        th Grade
+                        th Active
+                        th Cord
+                        th #[abbr(title='Position') Pos.]
+                        th #[abbr(title='Total Hours Volunteered') Hrs.]
+                        th #[abbr(title='Total Event Attendence') Evts.]
+                        th #[abbr(title='Total Meeting Attendence') Mts.]
+                        th #[abbr(title='Is on Probation') Prb?]
+                tbody
+        .columns
+            .column(style='margin-left: 1%')
+                .box.is-fullwidth
+                    p(style='text-align: center') Tutoring
+                    table.table.is-fullwidth#tutoring-table
+                        thead
+                            tr
+                                th Month
+                                th #[abbr(title="Times Tutored for the Given Month") Cnt.]
+                        tbody
+            .column.is-half
+                .box.is-fullwidth
+                    p(style='text-align: center') Volunteering
+                    table.table.is-fullwidth.is-hoverable#volunteering-table
+                        thead
+                            tr
+                                th #[abbr(title='MONTH-DAY-YEAR') Date]
+                                th Title
+                                th Hrs.
+                                th Type
+                        tbody
+            .column(style='margin-right: 1%')
+                .box.is-fullwidth
+                    p(style='text-align: center') Attendence
+                    table.table.is-fullwidth#attendence-table
+                        thead
+                            tr
+                                th #[abbr(title='MONTH-DAY-YEAR') Date]
+                                th Title
+                                th Is Meeting
+
+    script(src='/js/member-advanced.js')

@@ -5,6 +5,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const getJSON = require('get-json'); // load json from url
+const ntimes = require('@erwijet/ntimes');
 const validate = require('./validate');
 const rand = require('./random');
 const metrics = require('./metrics');
@@ -19,7 +20,8 @@ app.use(cors());
 app.set('view engine', 'pug');
 
 app.get('/auth', (req, res) => {
-    if (req.query.guess == process.env.PASSWORD)
+    console.log(req.query.guess, process.env.HASH, req.query.guess == process.env.HASH)
+    if (req.query.guess == process.env.HASH)
         res.redirect('/?token=' + rand.getVal());
     else {
         rand.advance(); // generate seeded val
@@ -37,12 +39,10 @@ app.get('/', (req, res) => {
                 },
                 {
                     title: 'Hours Volunteered',
-                    value: metrics.getVolunteerHourCount() + metrics.getTutoringHourCount(),
-                    target: '/tutoring'
+                    target: '#'
                 },
                 {
                     title: 'Events',
-                    value: metrics.getEventCount(),
                     target: '/events'
                 }
             ]
@@ -52,16 +52,45 @@ app.get('/', (req, res) => {
 });
 
 app.get('/showme', (req, res) => {
-    res.render('mongoDBCharts');
+    if (validate(req))
+        res.render('mongoDBCharts');
+    else res.redirect('/auth');
 });
 
-app.get('/membersTable', (req, res) => {
+app.get('/advanced/:id', (req, res) => {
+    let { id } = req.params;
+    if (!id)
+        res.redirect('/members');
+    // if (validate(req))
+        res.render('member-advanced', { id });
+    // else
+        // res.redirect('/auth');
+});
+
+app.get('/members/raw', (req, res) => {
     (async () => {
         getJSON('https://webhooks.mongodb-stitch.com/api/client/v2.0/app/googlesheets-qqzht/service/googlesheet-connect/incoming_webhook/webhook0', (err, json) => {
-            res.render('exports', { data: json })
+            let names = [];
+
+            for (let doc of json) {
+                if (doc.active)
+                    names.push(doc.name);
+            }
+
+            names.sort();
+            res.render('exports', { data: names })
         });
     })();
 });
+
+app.get('/members/showall', (req, res) => {
+    if (validate(req))
+        res.render('mongoInspectAll');
+    else
+        res.redirect('/auth');
+});
+
+
 
 app.get('/members', (req, res) => {
     if (validate(req))

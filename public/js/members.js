@@ -109,10 +109,16 @@ function sendRequest(active) {
 
         if (tagName == 'DIV')
             value = $(valueTag).find('select').val();
-        else
-            value = $(valueTag).val();
-        if (modifier == 'Not Equal To')
-            value = { $ne: value };
+        else if (target.toLowerCase() == 'name') 
+            value = { $regex: $(valueTag).val(), $options: 'i'}; // case insensitive regex
+        else value = $(valueTag).val();
+
+        if (modifier == 'Not Equal To') {
+            if (target.toLowerCase() == 'name')
+                value = { $not: { $regex: value.$regex, $options: value.$options } } // negate regex
+            else
+                value = { $ne: value };
+        }
         query[target.toLowerCase()] = value;
     }
 
@@ -171,7 +177,7 @@ function sendRequest(active) {
 
                 // more info button
                 btn = $('<p>').addClass('control').append(
-                    $('<button>').addClass('button is-small').attr('onclick', `inspectMember('${ doc._id }')`).append(
+                    $('<button>').addClass('button is-small').attr('onclick', `window.location.href="/advanced/${doc._id}" + window.location.search`).append(
                         $('<span>').addClass('icon is-small').append(
                             $('<i>').addClass('fas fa-street-view')
                         )

@@ -10,6 +10,10 @@ html
             ::-webkit-scrollbar {
                 display: none;
             }
+
+            .is-hidden: {
+                display: none;
+            }
     body
     .hero.is-light.is-bold.is-fullheight
             .hero-body
@@ -21,10 +25,14 @@ html
                             img(src='/img/nhs.png' width='100px')
                     h1.title Westosha Central NHS Management System
                     h2.subtitle Please authenticate to continue
-                    form.box#box(method='get', target='_self')
+                    form.box#box(method='get', target='_self' onsubmit="return onSubmit(this);$('#keybar').val('')")
                         .field.has-addons.is-expanded
-                            .control.has-icons-left.is-expanded
+                            .control.has-icons-left.is-expanded#main-field
                                 input.input#keybar(type="password", name="guess" placeholder="Key")
+                                span.icon.is-small.is-left
+                                    i.fas.fa-key
+                            .control.has-icons-left.is-expanded.is-hidden#hidden-field
+                                input.input(type="password", name="" placeholder="Key")
                                 span.icon.is-small.is-left
                                     i.fas.fa-key
                             .control
@@ -32,5 +40,6 @@ html
                                     span.icon.is-small
                                         i.fas.fa-sign-in-alt
     script(src="https://code.jquery.com/jquery-3.5.0.min.js")
+    script(src='js/md5.min.js')
     script(src='js/auth.js')
     script(src='js/keep-params.js')
