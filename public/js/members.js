@@ -143,23 +143,10 @@ function sendRequest(active) {
                 
                 // role tag
                 let tag = $('<span>').addClass('tag');
-                switch (doc.position) {
-                    case 'president':
-                        tag.addClass('is-warning').html('president');
-                        break;
-                    case 'vice-president':
-                        tag.addClass('is-primary').html('vice-president');
-                        break;
-                    case 'secretary':
-                        tag.addClass('is-info').html('secretary');
-                        break;
-                    case 'treasurer':
-                        tag.addClass('is-success').html('treasurer');
-                        break
-                    default:
-                        tag.addClass('is-light').html('member');
-                        break;
-                }
+                if (doc.position != 'member')
+                    tag.addClass('is-primary').html(doc.position);
+                else
+                    tag.addClass('is-light').html('member');
                 tags.append(tag);
 
                 // probation tag
@@ -259,22 +246,10 @@ function loadInactiveMembers() {
                 
                 // role tag
                 let tag = $('<span>').addClass('tag');
-                switch (doc.position) {
-                    case 'president':
-                        tag.addClass('is-warning').html('president');
-                        break;
-                    case 'vice-president':
-                        tag.addClass('is-primary').html('vice-president');
-                        break;
-                    case 'secretary':
-                        tag.addClass('is-info').html('secretary');
-                        break;
-                    case 'treasurer':
-                        tag.addClass('is-success').html('treasurer');
-                        break;
-                    default:
-                        tag.addClass('is-light').html('member');
-                }
+                if (tag.position != 'member')
+                    tag.addClass('is-primary').html(tag.position)
+                else
+                    tag.addClass('is-light').html('member');
                 tags.append(tag);
 
                 // probation tag
