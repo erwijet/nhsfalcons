@@ -129,7 +129,7 @@ function memberCheckboxChange(sender) {
 
                     $.ajax({
                         type: 'POST',
-                        url: 'http://api.nhsfacons.com/member/update',
+                        url: 'http://api.nhsfalcons.com/member/update',
                         data,
                         success: json => {  }
                     })
