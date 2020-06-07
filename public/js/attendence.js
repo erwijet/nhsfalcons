@@ -112,7 +112,7 @@ function memberCheckboxChange(sender) {
                     } else {
                         $.ajax({
                             type: 'POST',
-                            url: 'http://localhost:2020/attendence/remove',
+                            url: 'http://api.nhsfalcons.com/attendence/remove',
                             data: { eventID, memberID },
                         });
                         return;
@@ -129,7 +129,7 @@ function memberCheckboxChange(sender) {
 
                     $.ajax({
                         type: 'POST',
-                        url: 'http://localhost:2020/member/update',
+                        url: 'http://api.nhsfacons.com/member/update',
                         data,
                         success: json => {  }
                     })
