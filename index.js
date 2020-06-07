@@ -90,13 +90,15 @@ app.get('/members/showall', (req, res) => {
         res.redirect('/auth');
 });
 
-
-
 app.get('/members', (req, res) => {
     if (validate(req))
         res.render('members');
     else
         res.redirect('/auth');
+});
+
+app.get('/attendence', (req, res) => {
+    res.render('attendence');
 });
 
 app.listen(PORT, console.log(`Server listening on port ${PORT}`));

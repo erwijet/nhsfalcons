@@ -1,0 +1,29 @@
+extends layout
+include mixins/loading-mixin
+
+block body
+    +loadable('global')
+        .box(style='margin: 1%')
+            .level
+                .level-left
+                    .level-item
+                        .field.has-addons
+                            .control
+                                .button.is-static Take attendence for 
+                            .control.has-icons-left
+                                .select
+                                    select#eventSelect(onchange='eventSelectChange($(this));')
+                                span.icon.is-small.is-left
+                                    i.fas.fa-clipboard
+                    .level-item
+                        .has-text-grey
+                                #badge
+        .box(style='margin: auto 15%')
+            +loadable('members')
+                table.table.is-striped.is-narrow.is-hoverable.is-fullwidth#members-table(style='margin: auto')
+                    thead
+                        tr
+                            th Member Name
+                            th(style='text-align: right') #[abbr(title='Member Attended') Atnd.]
+                    tbody
+    script(src='/js/attendence.js')

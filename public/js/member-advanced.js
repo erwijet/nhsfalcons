@@ -69,6 +69,25 @@ function loadData() {
                 );
             }
 
+            // load attendence table
+
+            for (let event of doc.attendence) {
+                $('#attendence-table').find('tbody').append(
+                    $('<tr>')
+                        .append(
+                            $('<td>').html(`${event.month}-${event.day}-${event.year}`)
+                        )
+                        .append(
+                            $('<td>').html(event.title)
+                        )
+                        .append(
+                            $('<td>').append(
+                                $('<span>').addClass('tag').addClass(event.isMeeting ? 'is-warning' : '').html(event.isMeeting ? 'meeting' : 'event')
+                            )
+                        )
+                )
+            }
+
             // load volunteering table
 
             for (let vlt of doc.volunteering) {
