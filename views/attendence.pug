@@ -1,6 +1,12 @@
 extends layout
 include mixins/loading-mixin
 
+block append css
+    style.
+        .is-hidden {
+            display: none
+        }
+
 block body
     +loadable('global')
         .box(style='margin: 1%')
@@ -17,7 +23,10 @@ block body
                                     i.fas.fa-clipboard
                     .level-item
                         .has-text-grey
-                                #badge
+                            #badge
+                .level-right
+                    .level-item
+                        .button.is-outlined.is-success#save-button(onclick="saveAttendence()") Save Attendence
         .box(style='margin: auto 15%')
             +loadable('members')
                 table.table.is-striped.is-narrow.is-hoverable.is-fullwidth#members-table(style='margin: auto')

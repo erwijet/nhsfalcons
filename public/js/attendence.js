@@ -51,7 +51,7 @@ function loadMembers(eventID) {
                 success: memberJSON => {
                     $('#members-table').find('tbody').empty();
                     for (let member of memberJSON.docs) {
-                        let tr = $('<tr>')
+                        let tr = $('<tr>').attr('onclick', `let checked = $(this).find('input').attr('checked'); $(this).find('input').attr('checked', !checked)`)
                         let includes = false; // event is included in member's attendence
 
                         for (let i in member.attendence) {
@@ -70,7 +70,6 @@ function loadMembers(eventID) {
                                         $('<input>')
                                             .attr('type', 'checkbox')
                                             .attr('memberID', member._id)
-                                            .attr('onchange', 'memberCheckboxChange($(this))')
                                             .attr(includes ? 'checked' : 'null', '')
                                     )
                                 )
@@ -87,56 +86,49 @@ function loadMembers(eventID) {
     });
 }
 
-function memberCheckboxChange(sender) {
-    let eventID = $('#eventSelect').find(':selected').attr('eventID');
-    let checkedState = sender.is(':checked');
-    let memberID = sender.attr('memberid');
+function saveAttendence() {
+    $('#save-button').addClass('is-loading');
+    let didAttend = [];
+    let didNotAttend = [];
 
-    console.log(checkedState);
+    let members = $('#members-table').find('tr').toArray();
+    for (let member of members) {
+        let checkbox = $(member).find('input');
+        let checked = checkbox.is(':checked');
+        let memberID = checkbox.attr('memberid');
+
+        if (typeof memberID == 'undefined')
+            continue; // ignore headers
+
+        if (checked)
+            didAttend.push(memberID);
+        else
+            didNotAttend.push(memberID);
+    }
 
     $.ajax({
         type: 'POST',
-        url: 'http://api.nhsfalcons.com/event/query',
-        data: { query: { _id: eventID } },
-        success: eventJSON => {
-            let event = eventJSON.docs[0];
+        url: 'http://api.nhsfalcons.com/attendence/update-bulk',
+        data: {
+            memberIDs: didAttend,
+            eventID: $('#eventSelect').find(':selected').attr('eventID'),
+            state: true
+        },
+        success: (json) => { 
             $.ajax({
                 type: 'POST',
-                url: 'http://api.nhsfalcons.com/member/query',
-                data: { query: { _id: memberID } },
-                success: memberJSON => {
-                    let member = memberJSON.docs[0];
-
-                    if (checkedState) {
-                        member.attendence.push(event);
-                    } else {
-                        $.ajax({
-                            type: 'POST',
-                            url: 'http://api.nhsfalcons.com/attendence/remove',
-                            data: { eventID, memberID },
-                        });
-                        return;
-                    }
-
-                    let data = {
-                        filter: {
-                            _id: memberID
-                        },
-                        update: {
-                            attendence: member.attendence
-                        }
-                    }
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'http://api.nhsfalcons.com/member/update',
-                        data,
-                        success: json => {  }
-                    })
+                url: 'http://api.nhsfalcons.com/attendence/update-bulk',
+                data: {
+                    memberIDs: didNotAttend,
+                    eventID: $('#eventSelect').find(':selected').attr('eventID'),
+                    state: false
+                },
+                success: (json) => {
+                    $('#save-button').removeClass('is-loading');
                 }
             });
         }
-    })
+    });
 }
 
 loadEvents();
