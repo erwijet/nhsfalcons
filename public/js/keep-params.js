@@ -3,8 +3,11 @@
 $('a').click(function(e) {
     e.preventDefault();
 
-    let params = window.location.search,
-        dest = $(this).attr('href') + params;
+    let params = window.location.search;
+    let dest = $(this).attr('href') + params;
+
+    if (dest == '#')
+        return;
 
     window.setTimeout(function() {
         window.location.href = dest;
