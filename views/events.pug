@@ -1,0 +1,13 @@
+extends layout
+include mixins/loading-mixin
+
+block css
+    style.
+        div.hero {
+            background-color: #7c1618;
+        }
+
+block body
+    +loadable('main')
+    script.
+        setLoading('main', true)

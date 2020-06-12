@@ -5,10 +5,8 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const getJSON = require('get-json'); // load json from url
-const ntimes = require('@erwijet/ntimes');
 const validate = require('./validate');
 const rand = require('./random');
-const metrics = require('./metrics');
 const PORT = process.env.PORT || 1773;
 
 let app = express();
@@ -24,7 +22,7 @@ app.get('/auth', (req, res) => {
     if (req.query.guess == process.env.HASH)
         res.redirect('/?token=' + rand.getVal());
     else {
-        rand.advance(); // generate seeded val
+        rand.advance(); // generate seeded token
         res.render('auth');
     }
 });
@@ -98,7 +96,14 @@ app.get('/members', (req, res) => {
 });
 
 app.get('/attendence', (req, res) => {
-    res.render('attendence');
+    if (validate(req))
+        res.render('attendence');
+    else
+        res.redirect('/auth');
+});
+
+app.get('/events', (req, res) => {
+    res.render('events');
 });
 
 app.listen(PORT, console.log(`Server listening on port ${PORT}`));

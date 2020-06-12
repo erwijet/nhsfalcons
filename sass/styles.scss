@@ -4,7 +4,16 @@ $green: #008004;
 $red: #A80501;
 $cyan: #00469C;
 $yellow: #148F9C;
+$maroon: #7c1618;
 
 $primary: #53159C;
 
 @import "../node_modules/bulma/bulma.sass";
+
+.is-maroon {
+    background-color: $maroon;
+}
+
+.is-maroon * {
+    color: hsl(0%, 0%, 96%);
+}
