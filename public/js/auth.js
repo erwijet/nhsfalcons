@@ -1,6 +1,8 @@
 // use jquery
 // use md5.min.js (gh.com/blueimp/JavaScript-MD5)
 
+$(() => $('#keybar').focus());
+
 // hash guess on submit
 function onSubmit(form) {
     $('#main-field').toggleClass('is-hidden');
