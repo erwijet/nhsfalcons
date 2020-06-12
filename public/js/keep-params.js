@@ -6,7 +6,9 @@ $('a').click(function(e) {
     let params = window.location.search;
     let dest = $(this).attr('href') + params;
 
-    if (dest == '#')
+    console.log(dest);
+
+    if (dest.substr(0, 1) == '#')
         return;
 
     window.setTimeout(function() {
