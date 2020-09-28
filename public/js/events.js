@@ -14,7 +14,7 @@ function loadEvents() {
 
                     for (let event of events) {
                         let attendenceCount = 0;
-                        
+
                         for (let member of members) {
                             for (let atd of member.attendence) {
                                 if (atd._id == event._id)
@@ -22,41 +22,43 @@ function loadEvents() {
                             }
                         }
 
-                        console.log('generating event...', attendenceCount, event);
+                        let turnout = (attendenceCount / memberJSON.docs.length * 100).toFixed(2);
+                        console.log('rendering event...', attendenceCount, event);
 
-                        $('#event-table').find('tbody').append(generateStaticRow(
+                        $('#events-table').find('tbody').append(generateStaticRow(
                             event._id,
                             event.title,
                             event.month,
                             event.day,
                             event.year,
                             event.isMeeting,
-                            attendenceCount
+                            attendenceCount,
+                            turnout
                         ));
                     }
         
-                    // setLoading('main', false);
+                    setLoading('main', false);
                 }
             });
         }
     });
 }
 
-function generateStaticRow(id, title, day, month, year, isMeeting, attendence) {
+function generateStaticRow(id, title, day, month, year, isMeeting, attendence, turnout) {
     let tr = $('<tr>').attr('eventid', id)
     .append(
         $('<td>')
             .append(
-                $('<button>')
-                    .addClass('button is-inverted is-dark is-small')
-                    .append(
-                        $('<span>').addClass('icon is-small')
-                            .append(
-                                $('<i>')
-                                    .data
-                            )
-                    )
-                    .html('Take Attendence')
+                    $('<a>')
+                        .addClass('button is-inverted is-dark is-small')
+                        .append(
+                            $('<span>').addClass('icon is-small')
+                                .append(
+                                    $('<i>').addClass('fas fa-clipboard')
+                                )
+                        )
+                        .attr('href', `/attendence?eventid=${id}&token=${$('#token')[0].innerText}`)
+                        .html('Take Attendence')
             )
     )    
     .append(
@@ -77,11 +79,14 @@ function generateStaticRow(id, title, day, month, year, isMeeting, attendence) {
         .append(
             $('<td>').html(attendence)
         )
+        .append(
+            $('<td>').html(turnout + "%")
+        )
 
     return tr;
 }
 
 $(() => {
     setLoading('main', true);
-    // loadEvents();
+    loadEvents();
 });

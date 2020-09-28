@@ -15,31 +15,36 @@ html
                 display: none;
             }
     body
-    .hero.is-light.is-bold.is-fullheight
-            .hero-body
-                .container.has-text-centered
-                    .columns(style='margin: auto 0%')
-                        .column.is-half
-                            img(src='/img/bird.png' width='100px')
-                        .column.is-half
-                            img(src='/img/nhs.png' width='100px')
-                    h1.title Westosha Central NHS Management System
-                    h2.subtitle Please authenticate to continue
-                    form.box#box(method='get', target='_self' onsubmit="return onSubmit(this);$('#keybar').val('')")
-                        .field.has-addons.is-expanded
-                            .control.has-icons-left.is-expanded#main-field
-                                input.input#keybar(type="password", name="guess" placeholder="Key")
-                                span.icon.is-small.is-left
-                                    i.fas.fa-key
-                            .control.has-icons-left.is-expanded.is-hidden#hidden-field
-                                input.input(type="password", name="" placeholder="Key")
-                                span.icon.is-small.is-left
-                                    i.fas.fa-key
-                            .control
-                                button.button.is-dark#submitbtn
-                                    span.icon.is-small
-                                        i.fas.fa-sign-in-alt
-    script(src="https://code.jquery.com/jquery-3.5.0.min.js")
-    script(src='js/md5.min.js')
-    script(src='js/auth.js')
-    script(src='js/keep-params.js')
+        .hero.is-dark.is-bold.is-fullheight
+                .hero-body
+                    .container.has-text-centered
+                        .columns
+                            .column.is-one-quarter
+                            .column
+                                .box(style='padding: 5%; margin: 10%')
+                                    center
+                                        figure.image.is-64x64
+                                            img.is-rounded(src='/img/bird.png')
+                                        .container(style='margin: 10%')
+                                            h1.has-text-grey-darker.title Westosha Central NHS
+                                            form#box(method='get', target='_self' onsubmit="return onSubmit(this);$('#keybar').val('')")
+                                                .field.has-addons.is-expanded
+                                                    .control.has-icons-left.is-expanded#main-field
+                                                        input.input#keybar(type="password", name="guess" placeholder="Key")
+                                                        span.icon.is-small.is-left
+                                                            i.fas.fa-key
+                                                    .control.has-icons-left.is-expanded.is-hidden#hidden-field
+                                                        input.input(type="password", name="" placeholder="Key")
+                                                        span.icon.is-small.is-left
+                                                            i.fas.fa-key
+                                                    .control.is-hidden
+                                                        input.input(name="redirect", value=redirect)
+                                                    .control
+                                                        button.button.is-dark#submitbtn
+                                                            span.icon.is-small
+                                                                i.fas.fa-sign-in-alt
+                            .column.is-one-quarter
+        script(src="https://code.jquery.com/jquery-3.5.0.min.js")
+        script(src='js/md5.min.js')
+        script(src='js/auth.js')
+        script(src='js/keep-params.js')

@@ -1,13 +1,42 @@
 extends layout
 include mixins/loading-mixin
 
-block css
+block append css
     style.
         div.hero {
             background-color: #7c1618;
         }
 
+        /* Underline dotting is odd with text decoration skipping enabled. */
+
+        th > abbr { 
+            text-decoration-skip-ink: none;
+
+            /* misc. browser support (ew, safari) */
+
+            text-decoration-skip: none;
+            -webkit-text-decoration-skip: none;
+        }
+
 block body
+    - // b/c a links are generated *after* keep-params is loaded, manually load token to preserve
+    #token(style='display: none')= token
+    .hero.is-light.is-medium
+        .hero-body
+            .container
+                p.title Events
+                p.subtitle view events and event turnout
+
     +loadable('main')
-    script.
-        setLoading('main', true)
+        .box(style='margin: 1%')
+            table.table.is-fullwidth.is-hoverable.is-narrow#events-table
+                thead
+                    tr
+                        th
+                        th Date
+                        th Title
+                        th Type
+                        th.abbr #[abbr(title='Total Attendence') Atd.]
+                        th.abbr #[abbr(title='Percent of Members Attended') Turnout]
+                tbody
+    script(src='/js/events.js')

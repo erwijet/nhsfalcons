@@ -7,7 +7,19 @@ block append css
             display: none
         }
 
+        /* Underline dotting is odd with text decoration skipping enabled. */
+
+        th > abbr { 
+            text-decoration-skip-ink: none;
+
+            /* misc. browser support (ew, safari) */
+
+            text-decoration-skip: none;
+            -webkit-text-decoration-skip: none;
+        }
+
 block body
+    .is-hidden#event-id(value=eventID)
     +loadable('global')
         .box(style='margin: 1%')
             .level
@@ -26,7 +38,32 @@ block body
                             #badge
                 .level-right
                     .level-item
+                        .button.is-outlined(style='margin-right: 2%', onclick='loadEvents(); $("#editevent-modal").addClass("is-active");') Edit Events
                         .button.is-outlined.is-success#save-button(onclick="saveAttendence()") Save Attendence
+        .modal#editevent-modal
+            .modal-background(onclick='$(this).parent().find("tbody").empty(); $(this).parent().removeClass("is-active")')
+            .modal-card
+                header.modal-card-head
+                    p.modal-card-title Edit Events
+                section.modal-card-body
+                    table.table.is-striped.is-fullwidth#events-table
+                        thead
+                            th Title
+                            th Day
+                            th Month
+                            th Year
+                            th Meeting
+                        tbody
+                footer.modal-card-foot
+                    .level(style='width: 100%')
+                        .level-left
+                            .level-item
+                                button.button.is-success#save-events-button(onclick='$(saveButtonSelector).addClass("is-loading"); saveEvents();') Save
+                            .level-item
+                                button.button(onclick='$("#editevent-modal").find("tbody").empty(); $("#editevent-modal").removeClass("is-active");') Cancel
+                        .level-right
+                            .level-item
+                                button.button(onclick='onNewEventButtonClick()') New Event
         .box(style='margin: auto 15%')
             +loadable('members')
                 table.table.is-striped.is-narrow.is-hoverable.is-fullwidth#members-table(style='margin: auto')

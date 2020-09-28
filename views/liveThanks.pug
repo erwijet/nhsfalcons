@@ -1,0 +1,23 @@
+doctype html
+html
+    head
+        link(rel="stylesheet", href="/css/styles.css")
+        style.
+            ::-webkit-scrollbar {
+                display: none;
+            }
+    body
+        .hero.is-fullheight
+            .hero-body
+                .container
+                    center
+                        .circle-loader
+                            .checkmark.draw
+    script(src="https://code.jquery.com/jquery-3.5.0.min.js")
+    script.
+        $(() => {
+            setTimeout(() => {
+                $('.circle-loader').toggleClass('load-complete');
+                $('.checkmark').toggle();
+            }, 1000);
+        });

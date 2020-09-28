@@ -1,0 +1,47 @@
+extends layout
+include mixins/loading-mixin
+
+block body
+    .box(style='margin: 2%')
+        nav.level
+            .level-left
+                .level-item
+                    .field.has-addons
+                        .control
+                            .button.is-static Where Volunteering Hours
+                        .control
+                            .select
+                                select#select-operator
+                                    option(value='Less Than') Less Than
+                                    option(value='Greater Than') Greater Than
+                                    option(value='Less Than Equal To') Less Than Equal To
+                                    option(value='Greater Than Equal To') Greater Than Equal To
+                        .control
+                            input.input#input-hours(type='text', placeholder='Value...')
+                        .control
+                            button.button#btn-search(onclick='handleSearchRequest();')
+                                span.icon
+                                    i.fas.fa-search
+                                span Search
+            .level-right
+                .level-item
+                    .button.is-success.is-outlined#btn-save(onclick='handleSaveButtonRequest()') Save Probation
+                .level-item#btn-markall
+                    .button(onclick='handleMarkAllButton()') Mark All
+                .level-item#btn-unmarkall
+                    .button(onclick='handleUnmarkAllButton()') Unmark All
+                .level-item#btn-invert
+                    .button(onclick='handleInvertButton()') Invert
+    +loadable('main')
+        .box(style='margin: 2% 10%')
+            table.table.is-fullwidth.is-hoverable#table-members
+                thead
+                    tr
+                        th Hrs
+                        th Name
+                        th(style='text-align: right') Probation Status
+                tbody
+
+    script.
+        setLoading('main', true);
+    script(src='/js/probation.js')

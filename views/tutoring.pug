@@ -1,0 +1,61 @@
+extends layout
+include mixins/loading-mixin
+
+block css
+    style.
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
+
+
+block body
+    .box(style='margin: 2%')
+        .level
+            .level-item.is-fullwidth
+                .control.has-icons-left(style='width: 80%; padding-top: 0.05%; margin-right: 20%')
+                    form#quicksearch-form
+                        input.input.is-fullwidth#quicksearch-text(type='text', placeholder='Search Members...')
+                        
+                        span.icon.is-left
+                            i.fas.fa-search
+            .level-left
+                .level-item
+                    h3 Mark Tutoring for the month of 
+                .level-item
+                    .field
+                        .control.has-icons-left
+                            .select
+                                select#select-month
+                                    -
+                                         let months = [
+                                            "January",
+                                            "February",
+                                            "March",
+                                            "April",
+                                            "May",
+                                            "June",
+                                            "July",
+                                            "August",
+                                            "September",
+                                            "October",
+                                            "November",
+                                            "December"
+                                        ]
+                                        
+                                        let i = 0;
+
+                                    each date in months
+                                        option(value=i)= date
+                                        - i++
+                            span.icon.is-left
+                                i.far.fa-calendar-alt
+    +loadable('main')
+        .box(style='margin: 2% 10%')
+            table.table.is-fullwidth.is-hoverable
+                thead
+                    th Name
+                    th(style='text-align: right') Tutoring Credit
+                tbody
+    script(src='/js/tutoring.js')

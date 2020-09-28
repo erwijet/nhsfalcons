@@ -1,0 +1,69 @@
+doctype html
+html
+    head
+        script(defer, src='https://use.fontawesome.com/releases/v5.3.1/js/all.js')
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700', rel='stylesheet')
+        link(rel="stylesheet", href="/css/styles.css")
+        style.
+            article.tile {
+                text-align: center;
+                padding: 10%;
+                cursor: pointer;
+
+                display: flex;
+                align-items: center;
+            }
+
+            article.tile:hover {
+                background-color: whitesmoke
+            }
+
+            ::-webkit-scrollbar {
+                display: none;
+            }
+        script(src="https://code.jquery.com/jquery-3.5.0.min.js")
+    body
+        .hero.is-bold.is-medium.is-dark
+            .hero-body
+                .container
+                    .title NHS Live Poll
+                    .subtitle Cast your vote!
+                    
+        div(style='margin: 1%')
+            .tile.is-ancestor
+                .tile.is-vertical.is-12.is-fullheight
+                    .tile
+                        - let i = 0;
+                        - let n = options.length
+                        while i < n
+                            .tile.is-parent.is-vertical
+                                article.tile.is-child.box.has-text-centered(onclick=`castVote(${i})`)
+                                    p.title(style='margin: auto')= options[i]
+                                if (options[i + 1] != undefined)
+                                    article.tile.is-child.box(onclick=`castVote(${i + 1})`)
+                                        p.title(style='margin: auto')= options[i + 1]
+                                        - i++
+                            - i++
+        script(src='https://js.pusher.com/6.0/pusher.min.js')
+        script.
+            let pusher = new Pusher('20cfdf7b18144cf52c7a', {
+                cluster: 'us2'
+            });
+
+            let channel = pusher.subscribe('voting-channel');
+            channel.bind('reload', data => globalThis.location.reload()); 
+
+            function castVote(index) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/live/vote',
+                    data: { index },
+                    success: json => {
+                        if (json.code == 400)
+                            alert('Error in casting vote. Is voting enabled?');
+                        else 
+                            globalThis.document.location.href = '/live/thanks'
+                    } 
+                });
+            }

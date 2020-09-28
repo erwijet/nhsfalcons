@@ -20,12 +20,19 @@ block body
                             span Create
                         .button.is-outlined.is-info(onclick='$("#query-modal").toggleClass("is-active")')
                             span.icon
-                                i.fas.fa-search
-                            span Search
+                                i.fas.fa-wrench
+                            span Advanced Search
                         .button.is-outlined.is-info(onclick='loadInactiveMembers()')
                             span.icon
                                 i.fas.fa-user-slash
                             span View Inactive Members
+            .level-item
+                .control.has-icons-left(style='width: 90%; padding-top: 0.05%')
+                    form#quicksearch-form
+                        input.input.is-fullwidth#quicksearch-text(type='text', placeholder='Quick Search...')
+                        span.icon.is-left
+                            i.fas.fa-search
+                            
             .level-right
                 .level-item
                     .buttons
@@ -132,5 +139,5 @@ block body
                     tr
                         th Name
                         th Grade
-                        th Action
+                        th(style='text-align: center;') Action
     script(src='/js/members.js')

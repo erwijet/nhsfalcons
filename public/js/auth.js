@@ -11,6 +11,5 @@ function onSubmit(form) {
     let guess = form['guess'];
     guess.value = md5(guess.value);
 
-
     return true;
 }

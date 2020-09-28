@@ -1,0 +1,77 @@
+extends layout
+include mixins/loading-mixin
+
+block append css
+    style.
+        .is-hidden {
+            display: none;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+block body
+    - let data = JSON.stringify(options)
+    +loadable('main')
+        #starting-options(json=data)
+        .hero.is-primary.is-medium.is-bold
+            .hero-body
+                .container
+                    .title NHS Live Poll
+                    .subtitle Admin Page
+        .box(style='margin: 1%')
+            .columns
+                .column
+                    .subtitle #[strong Voting Enabled]
+                .column.is-pulled-right
+                    .field.is-pulled-right
+                        input#activeSwitch.switch(type='checkbox', name='activeSwitch', onchange='updateLiveAccess()')
+                        label#activeSwitchContainer.is-hidden.label(for='activeSwitch')
+        .columns
+            .column.is-one-third(style='margin-left: 1%')
+                nav.panel
+                    p.panel-heading Edit Options
+                nav.panel#navpanel
+                .box(style='padding: 0px; border: none')
+                    form.field.has-addons(onsubmit='event.preventDefault(); addOption($("#newoption").val());')
+                        p.control.is-expanded.has-icons-left
+                            input.input.is-fullwidth#newoption(type='text', placeholder='New Option', style='border: none')
+                            span.icon.is-left
+                                i.fas.fa-plus
+                        .control
+                            .button.is-outlined.has-icons(type='submit', onclick='addOption($("#newoption").val());', style='border: none')
+                                span.icon.is-left
+                                    i.fas.fa-check
+            .column.is-fullwidth
+                .box(style='margin-right: 1%')
+                    table.table.is-narrow.is-fullwidth#results-table
+                        thead
+                            tr
+                                th Option
+                                th Votes
+                                th Percent
+                        tbody
+    script.
+        setLoading('main', true);
+    script(src='https://cdn.jsdelivr.net/npm/bulma-tagsinput@2.0.0/dist/js/bulma-tagsinput.min.js')
+    script(src='https://js.pusher.com/6.0/pusher.min.js')
+    script(src='/js/results.js')
+    script.
+        let pusher = new Pusher('20cfdf7b18144cf52c7a', {
+            cluster: 'us2'
+        });
+
+        let channel = pusher.subscribe('voting-channel');
+
+
+        // set starting value for votingState switch
+        $.ajax({
+            type: 'GET',
+            url: '/live/get/votingstate',
+            success: json => {
+                if (json.value) $('#activeSwitch').prop('checked', 'checked'); // switch on
+                $('#activeSwitchContainer').removeClass('is-hidden'); // show switch
+                setLoading('main', false);
+            }   
+        });

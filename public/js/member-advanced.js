@@ -15,9 +15,10 @@ const monthIndex = {
     12: 'December'
  }
 
+ const id = $('#member-id').attr('value');
+
 function loadData() {
     setLoading('main', true);
-    const id = $('#member-id').attr('value');
 
     $('#main-table').find('tbody').empty();
     $('#tutoring-table').find('tbody').empty();
@@ -96,7 +97,7 @@ function loadData() {
                 )
             }
 
-            $('#volunteering-table').find('tbody').append(generateEditableVolunteeringRow(null, null, null, null, null, null, null, true))
+            $('#volunteering-table').find('tbody').append(generateEditableVolunteeringRow(null, null, null, null, null, null, null, true, true))
             setLoading('main', false);
         }
     });
@@ -125,7 +126,7 @@ function generateStaticVolunteeringRow(month, day, year, title, hours, district,
         `);
 }
 
-function generateEditableVolunteeringRow(month, day, year, title, hours, district, volunteeringID, isCreate) {
+function generateEditableVolunteeringRow(month, day, year, title, hours, district, volunteeringID, isCreate, isNewVolunteeringEvent) {
     let tr = $('<tr>').attr('id', volunteeringID + '-row')
         .append(
             $('<td>')
@@ -173,84 +174,106 @@ function generateEditableVolunteeringRow(month, day, year, title, hours, distric
                                 $('<div>').addClass('button is-small is-success').html('✔').attr('onclick', `saveVolunteeringRow('${volunteeringID}', ${isCreate == true})`)
                             )
                     )
+                    .append(
+                        $('<div>').addClass('column')
+                            .attr('style', isNewVolunteeringEvent ? 'display: none' : '')
+                            .append(
+                                $('<div>').addClass('button btn-remove is-small is-danger').html('✖').attr('onclick', `saveVolunteeringRow('${volunteeringID}', false, true)`)
+                            )
+                    )
                 )
         )
     return tr;
 }
 
-function saveVolunteeringRow(volunteeringID, isCreate) {
+function saveVolunteeringRow(volunteeringID, isCreate, isRemove) {
     console.log(isCreate);
+
     let month = $('#' + volunteeringID + '-month').val();
     let day = $('#' + volunteeringID + '-day').val();
     let year = $('#' + volunteeringID + '-year').val();
     let title = $('#' + volunteeringID + '-title').val();
     let hours = $('#' + volunteeringID + '-hours').val();
     let district = $('#' + volunteeringID + '-district').val();
+
+    if (isRemove) {
+        $.ajax({
+            type: 'POST',
+            url: 'http://api.nhsfalcons.com/volunteering/remove',
+            data: { volunteeringID, memberID: id },
+            success: json => {
+                console.log(json);
+                $('#' + volunteeringID + '-row').remove();
+            }
+        });
+    }
     
-    $.ajax({
-        type: 'POST',
-        url: 'http://api.nhsfalcons.com/member/query',
-        data: { query: { _id: $('#member-id').attr('value') } },
-        success: data => {
-            let member = data.docs[0];
-            for (let i in member.volunteering) {
-                let vlt = member.volunteering[i];
-                if (vlt._id == volunteeringID) {
-                    // update entry
-                    found = true;
+    else {
+        $.ajax({
+            type: 'POST',
+            url: 'http://api.nhsfalcons.com/member/query',
+            data: { query: { _id: $('#member-id').attr('value') } },
+            success: data => {
+                let member = data.docs[0];
+                for (let i in member.volunteering) {
+                    let vlt = member.volunteering[i];
+                    if (vlt._id == volunteeringID) {
+                        // update entry
+                        found = true;
 
-                    member.volunteering[i].month = month;
-                    member.volunteering[i].day = day;
-                    member.volunteering[i].year = year;
-                    member.volunteering[i].title = title;
-                    member.volunteering[i].inDistrict = (district == 'In District'),
-                    member.volunteering[i].hours = hours;
+                        member.volunteering[i].month = month;
+                        member.volunteering[i].day = day;
+                        member.volunteering[i].year = year;
+                        member.volunteering[i].title = title;
+                        member.volunteering[i].inDistrict = (district == 'In District'),
+                        member.volunteering[i].hours = hours;
 
-                    // send update to API
+                        // send update to API
 
+                        $.ajax({
+                            type: 'POST',
+                            url: 'http://api.nhsfalcons.com/member/update',
+                            
+                            data: { filter: { _id: $('#member-id').attr('value') }, update: { volunteering: member.volunteering } },
+                            success: () => {
+                                $('#' + volunteeringID + '-row').replaceWith(generateStaticVolunteeringRow(month, day, year, title, hours, district, volunteeringID));
+                                
+                                let newHrs = 0;
+                                
+                                for (let volunteeringEvent of member.volunteering) {
+                                    newHrs += Number.parseInt(volunteeringEvent.hours);
+                                }
+
+                                $('#main-table-hours').html(newHrs); // update total hours on main table
+                            }
+                        });
+                    }
+                }
+
+                // if marked as create (the last row), then create new, replace self with new, and clone self below
+
+                if (isCreate) {
                     $.ajax({
                         type: 'POST',
-                        url: 'http://api.nhsfalcons.com/member/update',
-                        
-                        data: { filter: { _id: $('#member-id').attr('value') }, update: { volunteering: member.volunteering } },
-                        success: () => {
-                            $('#' + volunteeringID + '-row').replaceWith(generateStaticVolunteeringRow(month, day, year, title, hours, district, volunteeringID));
+                        url: 'http://api.nhsfalcons.com/volunteering/new',
+                        data: { memberID: member._id, day, month, year, hours, inDistrict: district == 'In District', title},
+                        success: json => {
+                            console.log(json);
+                            $('#volunteering-table').find('tbody').find('tr:last-child').replaceWith(generateStaticVolunteeringRow(month, day, year, title, hours, district, json.volunteeringDoc._id)); // replace with static entry
+                            $('#volunteering-table').find('tbody').append(generateEditableVolunteeringRow(null, null, null, null, null, null, null, true, true)); // create new row on bottom for new entry
                             
-                            let newHrs = 0;
-                            
-                            for (let volunteeringEvent of member.volunteering) {
+                            let newHrs = 0; 
+                            for (let volunteeringEvent of json.member.volunteering) {
                                 newHrs += Number.parseInt(volunteeringEvent.hours);
                             }
 
-                            $('#main-table-hours').html(newHrs); // update total hours on main table
+                            $('#main-table-hours').html(newHrs); // update total hours on main table  
                         }
                     });
                 }
             }
-
-            // if marked as create (the last row), then create new, replace self with new, and clone self below
-
-            if (isCreate) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://api.nhsfalcons.com/volunteering/new',
-                    data: { memberID: member._id, day, month, year, hours, inDistrict: district == 'In District', title},
-                    success: json => {
-                        console.log(json);
-                        $('#volunteering-table').find('tbody').find('tr:last-child').replaceWith(generateStaticVolunteeringRow(month, day, year, title, hours, district, json.volunteeringDoc._id)); // replace with static entry
-                        $('#volunteering-table').find('tbody').append(generateEditableVolunteeringRow(null, null, null, null, null, null, null, true)); // create new row on bottom for new entry
-                        
-                        let newHrs = 0; 
-                        for (let volunteeringEvent of json.member.volunteering) {
-                            newHrs += Number.parseInt(volunteeringEvent.hours);
-                        }
-
-                        $('#main-table-hours').html(newHrs); // update total hours on main table  
-                    }
-                });
-            }
-        }
-    });
+        });
+    }
 }
 
 loadData();

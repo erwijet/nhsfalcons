@@ -125,6 +125,10 @@ function sendRequest(active) {
     setLoading('main', true);
     $('.modal').removeClass('is-active'); // hide all popups
 
+    requestMembers(query);
+}
+
+function requestMembers(query) {
     $.ajax({
         type: 'POST',
         url: 'http://api.nhsfalcons.com/member/query',
@@ -159,38 +163,38 @@ function sendRequest(active) {
 
                 // actions
 
-                let buttons = $('<div>').addClass('field has-addons');
+                let buttons = $('<div>').addClass('level');
                 let btn;
 
                 // more info button
-                btn = $('<p>').addClass('control').append(
-                    $('<button>').addClass('button is-small').attr('onclick', `window.location.href="/advanced/${doc._id}" + window.location.search`).append(
+                btn = $('<p>').addClass('control').attr('style', 'width: 80%').append(
+                    $('<button>').addClass('button is-small is-fullwidth').attr('onclick', `window.location.href="/advanced/${doc._id}" + window.location.search`).append(
                         $('<span>').addClass('icon is-small').append(
                             $('<i>').addClass('fas fa-street-view')
                         )
-                    ).append($('<span>').html('Inspect'))
+                    ).append($('<span>').html('Details'))
                 );
-                buttons.append(btn);
+                buttons.append($('<div>').addClass('level-item').append(btn));
 
                 // edit button
-                btn = $('<p>').addClass('control').append(
-                            $('<button>').addClass('button is-small').attr('onclick', `$('#editmember-submit-btn').prop('memberID', '${doc._id}'); $('#editmember-name').val('${doc.name}'); $('#editmember-grade').val(${doc.grade}); $('#editmember-role').val('${doc.position}'); $('#editmember-modal').addClass('is-active');`).append(
+                btn = $('<p>').addClass('control').attr('style', 'width: 80%').append(
+                            $('<button>').addClass('button is-small is-fullwidth').attr('onclick', `$('#editmember-submit-btn').prop('memberID', '${doc._id}'); $('#editmember-name').val('${doc.name}'); $('#editmember-grade').val(${doc.grade}); $('#editmember-role').val('${doc.position}'); $('#editmember-modal').addClass('is-active');`).append(
                                 $('<span>').addClass('icon is-small').append(
                                     $('<i>').addClass('fas fa-user-edit')
                                 )
                             ).append($('<span>').html('Edit'))
                         );
-                buttons.append(btn);
+                        buttons.append($('<div>').addClass('level-item').append(btn));
 
                 // tag for removal button
-                btn = $('<p>').addClass('control').append(
-                    $('<button>').addClass('button is-small').attr('onclick', `tagMemberForRemoval('${doc.name}', '${ doc._id }')`).append(
+                btn = $('<p>').addClass('control').attr('style', 'width: 80%').append(
+                    $('<button>').addClass('button is-small is-fullwidth').attr('onclick', `tagMemberForRemoval('${doc.name}', '${ doc._id }')`).append(
                         $('<span>').addClass('icon is-small').append(
                             $('<i>').addClass('fas fa-user-minus')
                         )
-                    ).append($('<span>').html('Tag as Inactive'))
+                    ).append($('<span>').html('Remove'))
                 );
-                buttons.append(btn);
+                buttons.append($('<div>').addClass('level-item').append(btn));
 
                 tr.append($('<td>').append(name));
                 tr.append($('<td>').append($('<span>').html(doc.grade)));
@@ -246,8 +250,8 @@ function loadInactiveMembers() {
                 
                 // role tag
                 let tag = $('<span>').addClass('tag');
-                if (tag.position != 'member')
-                    tag.addClass('is-primary').html(tag.position)
+                if (doc.position != 'member')
+                    tag.addClass('is-primary').html(doc.position)
                 else
                     tag.addClass('is-light').html('member');
                 tags.append(tag);
@@ -358,6 +362,20 @@ function setupMemberValidation() {
     }
 }
 
+function setupQuicksearch() {
+    $('#quicksearch-form').submit(e => {
+        e.preventDefault();
+        let name = $('#quicksearch-text').val().toLowerCase();
+
+        let query = { active: true, name: { $regex: name, $options: 'i'} };
+
+        setLoading('main', true); // show loading
+        requestMembers(query);
+
+        $('quicksearch-text').val(''); // clear text
+    })
+}
+
 function editMember(id) {
     if ($('#editmember-submit-btn').hasClass('is-static'))
         return
@@ -399,4 +417,5 @@ function newMember() {
 }
 
 setupMemberValidation();
-sendRequest(); // show all data onload
+setupQuicksearch();
+sendRequest(); // show all data on load

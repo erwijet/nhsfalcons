@@ -19,10 +19,13 @@
     "helmet": "^3.22.0",
     "morgan": "^1.10.0",
     "pug": "^2.0.4",
+    "pusher": "^3.0.1",
     "seedrandom": "^3.0.5"
   },
   "devDependencies": {
     "bulma": "^0.8.2",
+    "bulma-switch": "^2.0.0",
+    "bulma-tagsinput": "^2.0.0",
     "node-sass": "^4.14.1"
   }
 }

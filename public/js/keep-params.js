@@ -1,17 +1,24 @@
-// any a tag link redirect will keep token
+// use jquery
+// run on DOMContentLoaded to make sure all 'a' tags are targeted
 
-$('a').click(function(e) {
-    e.preventDefault();
+$(applyLinkTokenization);
 
-    let params = window.location.search;
-    let dest = $(this).attr('href') + params;
+// any a tag link redirect will keep the token
+function applyLinkTokenization() {
+    $('a').click(function(e) {
+        e.preventDefault();
 
-    console.log(dest);
+        let params = window.location.search;
+        let dest = $(this).attr('href');
+        params = (dest.indexOf('?') == -1 ? '?' : '&' ) + params.substr(params.search(/(token)[^&]*/), 13);
 
-    if (dest.substr(0, 1) == '#')
-        return;
+        if (dest.substr(0, 1) == '#')
+            return;
 
-    window.setTimeout(function() {
-        window.location.href = dest;
-    }, 100);
-});
+        window.setTimeout(function() {
+            window.location.href = dest + params;
+        }, 100);
+    });
+
+    return true;
+}
