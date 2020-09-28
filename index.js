@@ -19,6 +19,8 @@ app.set('view engine', 'pug');
 
 app.use('/live', live); // configure live middleware
 
+app.get('/vote', (req, res) => res.redirect('/live/vote'));
+
 app.get('/auth', (req, res) => {
     if (req.query.guess == process.env.HASH) {
         if (req.query.redirect.indexOf('?') != -1)
@@ -111,10 +113,6 @@ app.get('/tutoring', (req, res) => {
         res.render('tutoring', {});
     // else
         // res.redirect('/auth?redirect=/tutoring');
-});
-
-app.get('/res/speech', (req, res) => {
-    res.sendFile()
 });
 
 app.listen(PORT, console.log(`Server listening on port ${PORT}`));
