@@ -19,7 +19,7 @@ app.set('view engine', 'pug');
 
 app.use('/live', live); // configure live middleware
 
-app.get('/vote', (req, res) => res.redirect('http://www.nhsfalcons.com/live/vote'));
+app.get('/vote', (req, res) => res.redirect('/live/vote'));
 
 app.get('/auth', (req, res) => {
     if (req.query.guess == process.env.HASH) {
