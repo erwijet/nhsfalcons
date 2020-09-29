@@ -115,4 +115,8 @@ app.get('/tutoring', (req, res) => {
         // res.redirect('/auth?redirect=/tutoring');
 });
 
+app.get('/share/induction', (req, res) => {
+    res.redirect('https://drive.google.com/file/d/1dHgvOo-_str0dhhSibhfSdy5mNdM8UMY/view?usp=sharing');
+});
+
 app.listen(PORT, console.log(`Server listening on port ${PORT}`));
