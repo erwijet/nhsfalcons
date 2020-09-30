@@ -119,8 +119,4 @@ app.get('/share/induction', (req, res) => {
     res.redirect('https://drive.google.com/file/d/1dHgvOo-_str0dhhSibhfSdy5mNdM8UMY/view?usp=sharing');
 });
 
-app.get('/dev/test', (req, res) => {
-    res.end('hello!');
-})
-
 app.listen(PORT, console.log(`Server listening on port ${PORT}`));
