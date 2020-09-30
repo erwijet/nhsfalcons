@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dev": "npm i -g nodemon && nodemon",
     "css-build": "node-sass --omit-source-map-url sass/styles.scss public/css/styles.css",
     "css-watch": "npm run css-build -- --watch"
   },
