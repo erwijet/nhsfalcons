@@ -418,5 +418,6 @@ function newMember() {
 
 setupMemberValidation();
 setupQuicksearch();
+setLoading('main', true);
 requestMembers({ active: true });
 // sendRequest(); // show all data on load
