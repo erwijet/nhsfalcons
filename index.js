@@ -1,6 +1,3 @@
-// index.js
-// Tyler Holewinski
-
 require('dotenv').config();
 
 const cors = require('cors');
