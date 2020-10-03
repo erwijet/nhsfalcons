@@ -1,14 +1,16 @@
-setLoading('main', false);
-
 function loadMembers(searchText) {
     if (typeof searchText != 'string')
         return;
+
+    // clear current contents
+    $('tbody').empty();
+    setLoading('main', true);
 
     (async () => {
         let { docs } = await $.ajax({
             url: 'http://api.nhsfalcons.com/member/query',
             method: 'POST',
-            data: { query: { active: true } }
+            data: { query: { active: true, name: { '$regex': searchText, '$options': 'i' } } }
         });
 
         for (let member of docs) {
@@ -25,6 +27,8 @@ function loadMembers(searchText) {
         }
 
         applyLinkTokenization();
+
+        setLoading('main', false);
     })();
 }
 
@@ -32,13 +36,14 @@ function getCurrentSelectedMonthIndex() {
     let i = 0;
     for (let option of $('#select-month').children()) {
         if ($(option).is(':selected'))
-            return i;
+            return i + 1;
         i++;
     }
 }
 
 function generateTutoringRow(member) {
     let { _id: id, name, tutoring } = member;
+    console.log(member);
     let activeMonth = getCurrentSelectedMonthIndex();
     let activeTutoringCredits = -1;
 
@@ -63,7 +68,7 @@ function generateTutoringRow(member) {
                 .addClass('field')
                 .append(
                     $('<a>')
-                    .addClass('button has-text-black is-danger is-inverted')
+                    .addClass('button has-text-black is-dark is-inverted')
                     .attr('href', '/advanced/' + id)
                     .text(name)
                 )
@@ -118,6 +123,7 @@ function generateTutoringRow(member) {
                         .append(
                             $('<input>')
                             .attr('id', `btn-num-${id}`)
+                            .attr('onchange', `setTutoringCreditsForMemberid('${id}', $(this).val());`)
                             .addClass('input')
                             .attr('type', 'number')
                             .attr('value', activeTutoringCredits)
@@ -130,12 +136,56 @@ function generateTutoringRow(member) {
         )
 }
 
+function changeMembersCreditsBy(memberid, num) {
+    if (typeof num != 'number' || typeof memberid != 'string')
+        return -1;
+    
+    const creditsSelector = `#btn-num-${memberid}`;
+    let credits = $(creditsSelector).val();
+
+    credits = Number.parseFloat(credits) + num;
+
+    $(creditsSelector).val(credits);
+    setTutoringCreditsForMemberid(memberid, credits);
+}
+
+function setTutoringCreditsForMemberid(memberid, num) {
+    console.log('Starting update: ', memberid, num);
+    (async () => {
+        let res;
+        
+        res = await $.ajax({
+            method: 'POST',
+            url: 'http://api.nhsfalcons.com/tutoring/create',
+            data: { memberID: memberid, month: getCurrentSelectedMonthIndex(), count: num }
+        });
+
+        if (res.code == 400) { // if create request rejected; entry for month index already exists
+            res = await $.ajax({
+                method: 'POST',
+                url: 'http://api.nhsfalcons.com/tutoring/update',
+                data: { memberID: memberid, month: getCurrentSelectedMonthIndex(), count: num }
+            });
+
+            console.log('updated! ', res);
+        } else console.log('created!', res);
+    })();
+}
+
 function handleBtnClickPlus(memberid) {
-    console.log('Up click ' + memberid);
+    changeMembersCreditsBy(memberid, 1);
 }
 
 function handleBtnClickSub(memberid) {
-    console.log('Down click ' + memberid);
+    changeMembersCreditsBy(memberid, -1);
 }
 
+function setupHandles() {
+    $('#quicksearch-form').submit(e => {
+        e.preventDefault();
+        loadMembers($('#quicksearch-text').val());
+    });
+}
+
+setupHandles();
 loadMembers('');

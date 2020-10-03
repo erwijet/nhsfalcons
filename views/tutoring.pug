@@ -1,12 +1,12 @@
 extends layout
 include mixins/loading-mixin
 
-block css
+block append css
     style.
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
         -webkit-appearance: none;
-        margin: 0;
+            margin: 0;
         }
 
 
@@ -27,7 +27,7 @@ block body
                     .field
                         .control.has-icons-left
                             .select
-                                select#select-month
+                                select(onchange="loadMembers($('#quicksearch-text').val());")#select-month
                                     -
                                          let months = [
                                             "January",
