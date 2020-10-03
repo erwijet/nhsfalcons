@@ -38,8 +38,30 @@ block body
                             #badge
                 .level-right
                     .level-item
+                        .button.is-outlined(onclick='$("#bulkmark-modal").addClass("is-active")', style='margin-right: 2%') Bulk Mark
                         .button.is-outlined(style='margin-right: 2%', onclick='loadEvents(); $("#editevent-modal").addClass("is-active");') Edit Events
                         .button.is-outlined.is-success#save-button(onclick="saveAttendence()") Save Attendence
+        .modal#bulkmark-modal
+            .modal-background(onclick='$(this).parent().removeClass("is-active")')
+            .modal-card
+                header.modal-card-head
+                    p.modal-card-title Bulk Mark
+                section.modal-card-body
+                    textarea.textarea#bulk-edit-lines(placeholder='Jonny Appleseed\nJane Joe\nBilly Jean')
+                footer.modal-card-foot
+                    .level(style='width: 100%')
+                        .level-left
+                            .level-item
+                                .control.has-icons-left
+                                    .select
+                                        select#bulkEventSelect(onchange='eventSelectChange($(this));')
+                                    span.icon.is-small.is-left
+                                        i.fas.fa-clipboard   
+                            .level-item
+                                button.button.is-success#save-attendance-bulk-button(onclick='bulkSaveAttendence();') Mark Attendance
+                        .level-right
+                            .level-item
+                                button.button#cancel-attendance-button(onclick='$("#bulkmark-modal").removeClass("is-active")') Cancel
         .modal#editevent-modal
             .modal-background(onclick='$(this).parent().find("tbody").empty(); $(this).parent().removeClass("is-active")')
             .modal-card

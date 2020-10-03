@@ -6,8 +6,10 @@ const saveButtonSelector = '#save-events-button'; // target save button on said 
 function loadEvents() {
     setLoading('global', true);
     let dropdownSelector = '#eventSelect';
+    let bulkEditSelector = '#bulkEventSelect';
     let tableSelector = '#events-table';
 
+    $(bulkEditSelector).empty();
     $(dropdownSelector).empty();
 
     $.ajax({
@@ -22,7 +24,8 @@ function loadEvents() {
             for (let event of events) {
                 let val = `${event.title} (${event.month}/${event.day})`;
                 $(dropdownSelector).append($('<option>').attr('eventID', event._id).attr('value', val).attr('isMeeting', event.isMeeting).attr(event._id == $('#event-id').attr('value') ? 'selected' : '_', '').html(val));
-                
+                $(bulkEditSelector).append($('<option>').attr('eventID', event._id).attr('value', val).attr('isMeeting', event.isMeeting).attr(event._id == $('#event-id').attr('value') ? 'selected' : '_', '').html(val));
+
                 $(tableSelector).find('tbody').append($('<tr>')
                     .attr('eventid', event._id)
                     .append($('<td contenteditable>')
@@ -248,6 +251,110 @@ function onNewEventButtonClick() {
             )
         )
     );
+}
+
+function bulkSaveAttendence() {
+    (async () => {
+        $('#save-attendance-bulk-button').addClass('is-loading');
+        let didAttend = [];
+        let didNotAttend = [];
+        let lines = $('#bulk-edit-lines').val().split('\n');
+
+        let toLookup = [...lines];
+        let passN = 0;
+
+        let newToLookup = [];
+
+        // if email is provided, strip domain
+        for (let i of toLookup) {
+            if (i == "") continue; // remove whitespace
+
+            console.log(i.split('@'));
+            if (i.split('@').length > 1) newToLookup.push(i.split('@').shift().trim());
+            else newToLookup.push(i.trim());
+        }
+
+        toLookup = [...newToLookup];
+
+        while (toLookup.length != 0) {
+            console.log('starting pass ' + ++passN + '...', `toLookup: ${toLookup.length}`, `found: ${didAttend.length}`);
+            newToLookup = [];
+
+            for (let i in toLookup) {
+                let response = await $.ajax({
+                    method: 'POST',
+                    url: 'http://api.nhsfalcons.com/member/query',
+                    // add space before regex to indicate that we are matching last names, not first names
+                    data: { query: { name: { '$regex': ' ' + toLookup[i], '$options': 'i' } } }
+                });
+
+                let { docs } = response;
+                if (docs.length > 1) {
+                    alert(`Expression "${toLookup[i]}" is ambiguous. Please replace with specific expression.`)
+                }
+                else if (docs.length > 0) {
+                    let member = docs.shift();
+                    console.log(`Member Found! (regex: ${toLookup[i]})`, member)
+                    didAttend.push(member._id);
+                }
+                else {
+                    newToLookup.push(toLookup[i]);
+                    console.log(`Could not find member (regex: ${toLookup[i]}). Will search again in next pass...`, response)
+                }
+            }
+
+            toLookup = [];
+            toLookup = [...newToLookup];
+            toLookup.forEach((_, i) => { toLookup[i] = toLookup[i].substr(0, toLookup[i].length - 1) })
+        }
+
+        console.log('[Member Query: DONE] ' + toLookup.length + ' unfound.', didAttend);
+        console.log('Starting member update...');
+
+        let { docs } = await $.ajax({
+            type: 'POST',
+            url: 'http://api.nhsfalcons.com/member/query',
+            data: { query: { active: true } }
+        });
+
+        docs.forEach(elem => didNotAttend.push(elem._id)); // mark all members did not attend, then update with members that DID attend
+
+        let res;
+
+        res = await $.ajax({
+            type: 'POST',
+            url: 'http://api.nhsfalcons.com/attendence/update-bulk',
+            data: {
+                memberIDs: didNotAttend,
+                eventID: $('#bulkEventSelect').find(':selected').attr('eventID'),
+                state: false
+            }
+        });
+
+        console.log(res);
+
+        if (didAttend.length > 0) {
+
+            res = await $.ajax({
+                type: 'POST',
+                url: 'http://api.nhsfalcons.com/attendence/update-bulk',
+                data: {
+                    memberIDs: didAttend,
+                    eventID: $('#bulkEventSelect').find(':selected').attr('eventID'),
+                    state: true
+                }
+            });
+
+            console.log(res);
+            
+        }
+
+        $('#save-attendance-bulk-button').removeClass('is-loading');
+        $('#bulkmark-modal').removeClass('is-active'); // close popup
+        $('#event-id').attr('value', $('#bulkEventSelect').find(':selected').attr('eventID'))
+        loadEvents();
+        // loadMembers($('#bulkEventSelect').find(':selected').attr('eventID')); // refresh attendance
+    })();
 }
 
 loadEvents();
