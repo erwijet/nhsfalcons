@@ -109,11 +109,15 @@ app.get('/probation', (req, res) => {
 });
 
 app.get('/tutoring', (req, res) => {
-    // if (validate(req))
+    if (validate(req))
         res.render('tutoring', {});
-    // else
-        // res.redirect('/auth?redirect=/tutoring');
+    else
+        res.redirect('/auth?redirect=/tutoring');
 });
+
+app.get('/about', (req, res) => {
+    res.render('about');
+})
 
 app.get('/share/induction', (req, res) => {
     res.redirect('https://drive.google.com/file/d/1dHgvOo-_str0dhhSibhfSdy5mNdM8UMY/view?usp=sharing');
