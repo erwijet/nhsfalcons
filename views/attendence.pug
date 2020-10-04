@@ -36,6 +36,13 @@ block body
                     .level-item
                         .has-text-grey
                             #badge
+                .level-item
+                    .field(style='width:80%')
+                        form#quicksearch-form
+                            .control.has-icons-left
+                                input.input#quicksearch-text(type='text', placeholder='Quick Search...')
+                                span.icon.is-left
+                                    i.fas.fa-search
                 .level-right
                     .level-item
                         .button.is-outlined(onclick='$("#bulkmark-modal").addClass("is-active")', style='margin-right: 2%') Bulk Mark

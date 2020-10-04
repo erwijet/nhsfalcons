@@ -113,14 +113,15 @@ function saveEvents() {
 
 function eventSelectChange(sender) {
     let html = '';
+    let quicksearch = $('#quicksearch-text').val();
     if (sender.find(':selected').attr('ismeeting') == 'true')
         html = `<span class="tag is-warning">Meeting</span>`;
     $('#badge').html(html);
 
-    loadMembers(sender.find(':selected').attr('eventID'));
+    loadMembers(sender.find(':selected').attr('eventID'), quicksearch);
 }
 
-function loadMembers(eventID) {
+function loadMembers(eventID, searchstring) {
     setLoading('members', true);
 
     $.ajax({
@@ -129,10 +130,10 @@ function loadMembers(eventID) {
         data: { query: { _id: eventID } },
         success: eventJSON => {
             let event = eventJSON.docs[0];
-
+            console.log(searchstring);
             $.ajax({
                 type: 'POST',
-                data: { query: { active: true } },
+                data: { query: { active: true, name: { '$regex': searchstring, '$options': 'i' } } },
                 url: 'http://api.nhsfalcons.com/member/query',
                 success: memberJSON => {
                     console.log('loadMembers -> memberJSON: ', memberJSON.docs);
@@ -285,7 +286,7 @@ function bulkSaveAttendence() {
                     method: 'POST',
                     url: 'http://api.nhsfalcons.com/member/query',
                     // add space before regex to indicate that we are matching last names, not first names
-                    data: { query: { name: { '$regex': ' ' + toLookup[i], '$options': 'i' } } }
+                    data: { query: { active: true, name: { '$regex': ' ' + toLookup[i], '$options': 'i' } } }
                 });
 
                 let { docs } = response;
@@ -357,4 +358,12 @@ function bulkSaveAttendence() {
     })();
 }
 
+function setupQuicksearchHandle() {
+    $('#quicksearch-form').submit(e => {
+        e.preventDefault();
+        loadMembers($('#eventSelect').find(':selected').attr('eventID'), $('#quicksearch-text').val())
+    })
+}
+
+setupQuicksearchHandle();
 loadEvents();
