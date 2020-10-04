@@ -54,7 +54,7 @@ function loadData() {
                 .append($('<td>').html(doc.name))
                 .append($('<td>').html(doc.grade))
                 .append($('<td>').html(doc.active ? '<span class="tag is-success">Yes</span>': '<span class="tag is-danger">No</span>'))
-                .append($('<td>').html(doc.cord ? '<span class="tag is-success">Yes</span>': '<span class="tag is-danger">No</span>'))
+                // .append($('<td>').html(doc.cord ? '<span class="tag is-success">Yes</span>': '<span class="tag is-danger">No</span>'))
                 .append($('<td>').html(doc.position))
                 .append($('<td>').attr('id', 'main-table-hours').html(hours))
                 .append($('<td>').html(doc.attendence.length))
