@@ -187,5 +187,15 @@ function setupHandles() {
     });
 }
 
+function setCurrentMonth() {
+    let month = new Date() .getMonth() + 1;
+    let i = 1;
+    for (let child of $('#select-month').children()) {
+        if (i++ == month)
+            $(child).attr('selected', '_');
+    }
+}
+
+setCurrentMonth();
 setupHandles();
 loadMembers('');
