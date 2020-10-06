@@ -4,34 +4,40 @@ const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const getJSON = require('get-json'); // load json from url
 const validate = require('./validate');
+const today = require('./today');
 const rand = require('./random');
 const live = require('./live');
 const PORT = process.env.PORT || 1773;
+
 let app = express();
+
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('common'));
 app.use(helmet());
 app.use(cors());
-app.set('view engine', 'pug');
-
+app.use(cookieParser());
 app.use('/live', live); // configure live middleware
 
-app.get('/vote', (req, res) => res.redirect('/live/vote'));
+app.set('view engine', 'pug');
 
 app.get('/auth', (req, res) => {
     if (req.query.guess == process.env.HASH) {
-        if (req.query.redirect.indexOf('?') != -1)
-            res.redirect(`${req.query.redirect}&token=${rand.getVal()}`);
-        else
-            res.redirect(`${req.query.redirect}?token=${rand.getVal()}`);   
+        res.cookie('nhsfalconsauth', today(), { maxAge: 60000 }); // administer cookie. Maxage 1 hr
+        res.redirect(req.query.redirect); 
     }
     else {
         rand.advance(); // generate seeded token
         res.render('auth', { redirect: req.query.redirect || '/' });
     }
+});
+
+app.get('/logout', (req, res) => {
+    res.clearCookie('nhsfalconsauth');
+    res.redirect('/auth');
 });
 
 app.get('/', (req, res) => {
@@ -116,7 +122,22 @@ app.get('/tutoring', (req, res) => {
 });
 
 app.get('/about', (req, res) => {
-    res.render('about');
+    const videos = [
+        "https://www.youtube.com/embed/R6hq9cOaQAk",
+        "https://www.youtube.com/embed/WT7AZNfkV04",
+        "https://www.youtube.com/embed/PjR7Ry4NjW8",
+        "https://www.youtube.com/embed/5m29_igFpPs",
+        "https://www.youtube.com/embed/R-O5hP9k6qM",
+        "https://www.youtube.com/embed/GQ_p4412qeQ",
+        "https://www.youtube.com/embed/KCz2zhmG9V8",
+        "https://www.youtube.com/embed/6hUZ01zaxzQ"
+    ];
+
+    let { v } = req.query;
+    console.log(v);
+    if (typeof v == 'undefined')
+        v = 0;
+    res.render('about', { vindex: v, vidurl: videos[v] });
 })
 
 app.get('/share/induction', (req, res) => {

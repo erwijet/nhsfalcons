@@ -26,7 +26,7 @@ function loadMembers(searchText) {
             $(`#btn-sub-${id}`).attr('onclick', `handleBtnClickSub("${ id }")`);
         }
 
-        applyLinkTokenization();
+        // applyLinkTokenization();
 
         setLoading('main', false);
     })();

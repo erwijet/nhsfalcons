@@ -1,6 +1,7 @@
 extends layout
 
 block body
+    div#vidid(style='display: none', value=vindex)
     .columns
         .column.is-half
             .box(style='margin: 2%')
@@ -8,37 +9,40 @@ block body
                     p.menu-label Help Videos
                     ul.menu-list
                         li
-                            a.is-disabled General
+                            a General
                             ul
                                 li
-                                    a Manage Members
+                                    a#0(href='/about?v=0') Manage Members
                                 li
-                                    a Add Volunteering Hours
-                                li
-                                    a Remove Members
+                                    a#1(href='/about?v=1') Add Volunteering Hours
                         li
                             a.is-disabled Events
                             ul
                                 li
-                                    a Edit Events
+                                    a#2(href='/about?v=2') Edit Events
                                 li
-                                    a Mark Attendance
+                                    a#3(href='/about?v=3') Mark Attendance
                         li
                             a.is-disabled NHS Falcons Live
                             ul
                                 li
-                                    a Overview & How to Use
+                                    a#4(href='/about?v=4') Overview & How to Use
                         li
                             a.is-disabled Advanved / Admin
                             ul
                                 li
-                                    a Change Login Key
+                                    a#5(href='/about?v=5') Change Login Key
                                 li
-                                    a Push Code Updates
+                                    a#6(href='/about?v=6') Push Code Updates
                                 li
-                                    a Add Subdomain Redirect
+                                    a#7(href='/about?v=7') Add Subdomain Redirect
                                 li
-                                    a Manage Email Alias'
+                                    a#8(href='/about?v=8') Manage Email Alias'
         .column
                 .box(style='margin: 2%; margin-left: 0%')
-                    iframe(style='margin-left: 20%; margin-top: 15%; margin-bottom: 17.5%', width='560' height='315' src='https://www.youtube.com/embed/hHAepgwz0X4' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+                    iframe(style='margin-left: 20%; margin-top: 15%; margin-bottom: 17.5%', width='560' height='315' src=vidurl frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+    script.
+        $(() => {
+            let v = $('#vidid').attr('value');
+            $(`#${v}`).addClass('is-active');
+        });
