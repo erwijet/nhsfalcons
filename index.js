@@ -3,6 +3,8 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
+const path = require('path');
+const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const getJSON = require('get-json'); // load json from url
@@ -18,6 +20,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('common'));
 app.use(helmet());
+app.use(serveFavicon(path.join(__dirname, 'public', 'img', 'favicon.png')));
 app.use(cors());
 app.use(cookieParser());
 app.use('/live', live); // configure live middleware
