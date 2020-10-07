@@ -1,3 +1,4 @@
+const today = require('./today');
 const validate = require('./validate');
 const Pusher = require('pusher');
 let router = require('express').Router();
@@ -15,11 +16,12 @@ let pusher = new Pusher({
 
 router.get('/', (req, res) => {
     if (validate(req))
-        res.render('live', { options });
+        res.render('live', { options, auth: req.cookies.nhsfalconsauth });
     else res.redirect('/auth?redirect=/live');
 });
 
 router.get('/vote', (req, res) => {
+    console.log(options);
     res.render('castvote', { options });
 });
 
@@ -56,10 +58,10 @@ router.get('/get/:key', (req, res) => {
 });
 
 router.post('/set', (req, res) => {
-    if (!validate(req)) {
+    if (req.query.token != today()) {
         res.json({
             code: 400,
-            msg: 'error! invalid (or missing) request token'
+            msg: 'error! invalid (or missing) request token. Try navigating to nhsfalcons.com/logout'
         });
         return;
     }

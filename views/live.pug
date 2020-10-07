@@ -12,6 +12,7 @@ block append css
         }
 
 block body
+    .is-hidden#auth(value=auth)
     - let data = JSON.stringify(options)
     +loadable('main')
         #starting-options(json=data)

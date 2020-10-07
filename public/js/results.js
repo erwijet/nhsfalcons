@@ -2,9 +2,11 @@
 // results "admin" page for live.nhsfalcons.com
 // served from this project to make use of /auth
 
-let tokenRegex = new RegExp(/(?<=token=)[^&\s]*/i);
-let token = globalThis.location.search.substr(1);
-token = tokenRegex.exec(token).shift();
+// let tokenRegex = new RegExp(/(?<=token=)[^&\s]*/i);
+// let token = globalThis.location.search.substr(1);
+// token = tokenRegex.exec(token).shift();
+
+let token = $('#auth').attr('value');
 
 let options;
 let votes;
