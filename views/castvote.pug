@@ -61,7 +61,7 @@ html
                     data: { index },
                     success: json => {
                         if (json.code == 400)
-                            alert('Error in casting vote. Is voting enabled?');
+                            alert('Hang on there! The poll admin has not enabled voting yet...');
                         else 
                             globalThis.document.location.href = '/live/thanks'
                     } 
