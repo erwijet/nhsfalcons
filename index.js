@@ -29,7 +29,7 @@ app.set('view engine', 'pug');
 
 app.get('/auth', (req, res) => {
     if (req.query.guess == process.env.HASH) {
-        res.cookie('nhsfalconsauth', today(), { maxAge: 60000 }); // administer cookie. Maxage 1 hr
+        res.cookie('nhsfalconsauth', today(), { maxAge: 60 * 60 * 1000 }); // administer cookie. 1 hr
         res.redirect(req.query.redirect); 
     }
     else {
