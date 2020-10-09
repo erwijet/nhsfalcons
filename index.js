@@ -124,7 +124,7 @@ app.get('/tutoring', (req, res) => {
         res.redirect('/auth?redirect=/tutoring');
 });
 
-app.get('/about', (req, res) => {
+app.get('/help', (req, res) => {
     const videos = [
         "https://www.youtube.com/embed/R6hq9cOaQAk",
         "https://www.youtube.com/embed/WT7AZNfkV04",
@@ -137,11 +137,16 @@ app.get('/about', (req, res) => {
     ];
 
     let { v } = req.query;
-    console.log(v);
     if (typeof v == 'undefined')
         v = 0;
     res.render('about', { vindex: v, vidurl: videos[v] });
 })
+
+app.get('/watch', (req, res) => res.render('watch'));
+
+app.get('/fireflies', (req, res) => {
+    res.render('owlcity');
+});
 
 app.get('/share/induction', (req, res) => {
     res.redirect('https://drive.google.com/file/d/1dHgvOo-_str0dhhSibhfSdy5mNdM8UMY/view?usp=sharing');
