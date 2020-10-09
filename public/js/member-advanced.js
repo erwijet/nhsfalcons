@@ -44,7 +44,7 @@ function loadData() {
             }
 
             let meetings = 0;
-            for (let event in doc.events) {
+            for (let event of doc.attendence) {
                 if (event.isMeeting)
                     meetings++;
             }
