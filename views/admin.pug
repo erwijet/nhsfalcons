@@ -1,0 +1,65 @@
+extends layout
+include mixins/loading-mixin
+
+block append head
+    meta(charset='utf8')
+    link(rel='stylesheet', href='/jsoneditor/jsoneditor.min.css')
+    script(src='/jsoneditor/jsoneditor.min.js')
+
+block append css
+    style.
+        .is-hidden {
+            display: 'none';
+        }
+
+block body
+    .is-hidden#urljson(value=urljson)
+    .box(style='margin: 2%')
+        nav.level
+            .level-left
+                .level-item
+                    .button.is-dark.is-outlined(onclick='viewDocsOnClick();')
+                        span.icon.is-left
+                            i.fas.fa-book
+                        p View MongoDB Documentation
+            .level-right
+                .level-item   
+                    .button.is-success.is-outlined#runQueryBtn(onclick='runQueryOnClick();')
+                        span.icon.is-left
+                            i.fas.fa-database
+                        p Run Query
+    .box(style='margin: 2%; height: 500px;')
+        #jsoneditor(style='width: 100%; height: 100%;')
+
+    script.
+        // create the editor
+        const container = document.getElementById("jsoneditor")
+        let options = { mode: 'code', fontSize: 25 };
+    if isExplore
+        script.
+            options['mode'] = 'tree'; // set editor mode to text mode 
+    script.
+        const editor = new JSONEditor(container, options)
+        // set json
+
+        let urlJson = { _undefined: true };
+        try { urlJson = JSON.parse($('#urljson').attr('value')); } catch {  }
+
+        let initialJson = {
+            name: { '$regex': 'John Doe', '$options': 'i' },
+        }
+
+        if (!urlJson._undefined)
+            initialJson = urlJson;
+
+        if (urlJson)
+        editor.set(initialJson)
+
+        // get json
+        const updatedJson = editor.get()
+
+        editor.aceEditor.setOptions({
+            fontSize: '20pt',
+            fontFamily: 'SF Mono'
+        });
+
