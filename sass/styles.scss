@@ -1,5 +1,11 @@
 @charset "utf-8";
 
+// Define SF Mono b/c apple hates everyone, including me
+@font-face {
+  font-family: 'SF Mono';
+  src: url('https://github.com/supercomputra/SF-Mono-Font/blob/master/SFMono-RegularItalic.otf?raw=true') format('opentype');
+}
+
 $green: #008004;
 $red: #A80501;
 $cyan: #00469C;

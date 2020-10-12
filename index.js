@@ -6,12 +6,14 @@ const morgan = require('morgan');
 const path = require('path');
 const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
+const querystring = require('querystring'); // parse url json
 const cookieParser = require('cookie-parser');
 const getJSON = require('get-json'); // load json from url
 const validate = require('./validate');
 const today = require('./today');
 const rand = require('./random');
 const live = require('./live');
+const { URLSearchParams } = require('url');
 const PORT = process.env.PORT || 1773;
 
 let app = express();
@@ -150,6 +152,10 @@ app.get('/fireflies', (req, res) => {
 
 app.get('/share/induction', (req, res) => {
     res.redirect('https://drive.google.com/file/d/1dHgvOo-_str0dhhSibhfSdy5mNdM8UMY/view?usp=sharing');
+});
+
+app.get('/admin', (req, res) => {
+    res.render('admin', { isExplore: req.query.isExplore, urljson: req.query.obj || ''})
 });
 
 app.listen(PORT, console.log(`Server listening on port ${PORT}`));

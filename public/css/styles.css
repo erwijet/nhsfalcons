@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'SF Mono';
+  src: url("https://github.com/supercomputra/SF-Mono-Font/blob/master/SFMono-RegularItalic.otf?raw=true") format("opentype"); }
+
 /*! bulma.io v0.8.2 | MIT License | github.com/jgthms/bulma */
 @keyframes spinAround {
   from {
