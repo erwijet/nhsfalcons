@@ -18,10 +18,15 @@ block body
         nav.level
             .level-left
                 .level-item
-                    .button.is-dark.is-outlined(onclick='viewDocsOnClick();')
-                        span.icon.is-left
-                            i.fas.fa-book
-                        p View MongoDB Documentation
+                    .buttons
+                        .button.is-dark.is-outlined(onclick='viewDocsOnClick();')
+                            span.icon.is-left
+                                i.fas.fa-book
+                            p View MongoDB Documentation
+                        .button.is-dark.is-outlined(onclick='exportOnClick()')
+                           span.icon.is-left
+                            i.fas.fa-link
+                           p Export
             .level-right
                 .level-item   
                     .button.is-success.is-outlined#runQueryBtn(onclick='runQueryOnClick();')
@@ -30,6 +35,13 @@ block body
                         p Run Query
     .box(style='margin: 2%; height: 500px;')
         #jsoneditor(style='width: 100%; height: 100%;')
+
+    .modal#results
+        .modal-background(onclick='$(this).parent().removeClass("is-active")')
+        .modal-content
+            +loadable('results')
+                #jsonresult(style='width: 100%; height: 100%; background-color: white')
+        button.modal-close.is-large(aria-label='close', onclick='$(this).parent().removeClass("is-active")')
 
     script.
         // create the editor
@@ -59,7 +71,6 @@ block body
         const updatedJson = editor.get()
 
         editor.aceEditor.setOptions({
-            fontSize: '20pt',
-            fontFamily: 'SF Mono'
+            fontSize: '20pt'
         });
-
+    script(src='/js/admin.js')
