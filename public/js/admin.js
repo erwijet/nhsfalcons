@@ -31,7 +31,7 @@ function runQueryOnClick() {
     (async () => {
         let res = await $.ajax({
             method: 'POST',
-            url: 'http://localhost:2020/raw/query',
+            url: 'http://api.nhsfalcons.com/raw/query',
             data: {
                 auth: authToken,
                 query: editor.get() // load user-defined JSON
