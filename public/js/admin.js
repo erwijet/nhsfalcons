@@ -39,7 +39,7 @@ function runQueryOnClick() {
         });
 
         if (res.code == 401)
-            globalThis.location.replace('/auth?redirect=/admin?obj=' + editor.getText());
+            globalThis.location.replace('/auth?redirect=/admin?obj=' + editor.getText() + '&mode=' + new URLSearchParams(globalThis.location.search) .get('mode'));
         console.log(res);
 
         resEditor.set(res.docs);
@@ -55,9 +55,27 @@ function runQueryOnClick() {
 
 function exportOnClick() {
     alert('JSON saved to url. Copy & Save');
-    globalThis.location.replace('/admin?obj=' + editor.getText());
+
+    let usp = new URLSearchParams(globalThis.location.search);
+    let newAddr = '/admin?obj=' + editor.getText();
+    console.log(editor.getText());
+
+    for (let key of usp.keys()) {
+        if (key != 'obj')
+            newAddr += `&${key}=${usp[key]}`;
+    }
+
+    globalThis.location.replace(newAddr);
 }
 
 function viewDocsOnClick() {
     globalThis.location.replace('https://docs.mongodb.com/manual/reference/operator/query/')
 }
+
+$(() => {
+    // setup mode menu selector
+
+    ['query', 'insert', 'remove', 'agg'].forEach(mode => {
+        $(`#menu-${mode}`).find('a').attr('href', `/admin?mode=${mode}&obj=${editor.getText()}`)
+    });
+});
