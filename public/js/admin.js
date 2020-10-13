@@ -42,7 +42,8 @@ function runQueryOnClick() {
             globalThis.location.replace('/auth?redirect=/admin?obj=' + editor.getText() + '&mode=' + new URLSearchParams(globalThis.location.search) .get('mode'));
         console.log(res);
 
-        resEditor.set(res.docs);
+        if (res.docs)
+            resEditor.set(res.docs);
 
         if (res.code == 400)
             resEditor.set(res.msg);
