@@ -33,8 +33,6 @@ block body
                         ul
                             li#menu-query
                                 a Query
-                            li#menu-insert
-                                a Insert
                             li#menu-remove
                                 a Remove
                             li#menu-agg
@@ -43,7 +41,7 @@ block body
                     .button.is-success.is-outlined#runQueryBtn(onclick='runQueryOnClick();')
                         span.icon.is-left
                             i.fas.fa-database
-                        p Run Query
+                        p Execute
     .box(style='margin: 2%; height: 500px;')
         #jsoneditor(style='width: 100%; height: 100%;')
 
@@ -55,6 +53,7 @@ block body
         button.modal-close.is-large(aria-label='close', onclick='$(this).parent().removeClass("is-active")')
 
     script.
+
         // create the editor
         const container = document.getElementById("jsoneditor")
         let options = { mode: 'code', fontSize: 25 };
@@ -82,6 +81,10 @@ block body
         const updatedJson = editor.get()
 
         editor.aceEditor.setOptions({
-            fontSize: '20pt'
+            fontSize: '20pt',
+            theme: 'https://raw.githubusercontent.com/ajaxorg/ace/master/lib/ace/theme/iplastic.js'
         });
+
+        editor.aceEditor.$enableLiveAutocompleation = true;
+        //- editor.aceEditor.setTheme('ace/theme/iplastic');
     script(src='/js/admin.js')

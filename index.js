@@ -154,9 +154,27 @@ app.get('/share/induction', (req, res) => {
     res.redirect('https://drive.google.com/file/d/1dHgvOo-_str0dhhSibhfSdy5mNdM8UMY/view?usp=sharing');
 });
 
-app.get('/admin', (req, res) => {
+app.get('/test/:echo', (req, res) => res.end(req.params.echo));
+
+app.get('/rdr/:name', (req, res) => {
+    (async () => {
+        console.log('starting...');
+        getJSON('http://localhost:2020/rdr/find?q=' + req.params.name, (err, entry) => {
+            console.log(err, entry);
+
+            if (entry.code != 200) {
+                res.json(entry); // show error
+                return;
+            }
+
+            res.redirect(308, entry.url); // redirect with code 308
+        });
+    })();
+});
+
+app.get('/admin/db', (req, res) => {
     if (!req.query.mode || req.query.mode == 'undefined')
-        res.redirect(`/admin?mode=code${ req.query.obj ? '&obj=' + req.query.obj : '' }${ req.query.isExplore ? '&isExplore=' + req.query.isExplore : '' }`);
+        res.redirect(`/admin/db?mode=query${ req.query.obj ? '&obj=' + req.query.obj : '' }${ req.query.isExplore ? '&isExplore=' + req.query.isExplore : '' }`);
     else
         res.render('admin', { isExplore: req.query.isExplore, urljson: req.query.obj || ''})
 });
