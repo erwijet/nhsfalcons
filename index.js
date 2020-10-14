@@ -159,7 +159,7 @@ app.get('/test/:echo', (req, res) => res.end(req.params.echo));
 app.get('/rdr/:name', (req, res) => {
     (async () => {
         console.log('starting...');
-        getJSON('http://localhost:2020/rdr/find?q=' + req.params.name, (err, entry) => {
+        getJSON('http://api.nhsfalcons.com/rdr/find?q=' + req.params.name, (err, entry) => {
             console.log(err, entry);
 
             if (entry.code != 200) {
