@@ -160,10 +160,9 @@ app.get('/rdr/:name', (req, res) => {
     (async () => {
         console.log('starting...');
         getJSON('http://api.nhsfalcons.com/rdr/find?q=' + req.params.name, (err, entry) => {
-            console.log(err, entry);
 
             if (entry.code != 200) {
-                res.json(entry); // show error
+                res.end(":(\n\nNo NHSFalcons RDR string entry with provided name " + req.params.name + " exists. Check Capitilization?\n\n\nSorry,\nTyler (p'21)"); // show error
                 return;
             }
 
