@@ -178,4 +178,6 @@ app.get('/admin/db', (req, res) => {
         res.render('admin', { isExplore: req.query.isExplore, urljson: req.query.obj || ''})
 });
 
+app.get('/shop', (req, res) => res.render('shop'));
+
 app.listen(PORT, console.log(`Server listening on port ${PORT}`));
