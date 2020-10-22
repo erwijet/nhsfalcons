@@ -178,4 +178,12 @@ app.get('/admin/db', (req, res) => {
         res.render('admin', { isExplore: req.query.isExplore, urljson: req.query.obj || ''})
 });
 
+app.post('/gsync/onSubmit', (req, res) => {
+    console.log(req.body);
+    res.sendStatus(200).json({
+        code: 200,
+        'msg': 'ok'
+    });
+})
+
 app.listen(PORT, console.log(`Server listening on port ${PORT}`));
