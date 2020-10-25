@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run css-build&&npm i&&node index.js",
+    "start": "npm run css-build&&npm i&&npm prune&&node index.js",
     "dev": "npm i -g nodemon && nodemon",
-    "css-build": "npm i -g node-sass&&npm rebuild node-sass&&node-sass --omit-source-map-url sass/styles.scss public/css/styles.css",
+    "css-build": "npm i -g --unsafe-perm node-sass&&npm rebuild&&node-sass --omit-source-map-url sass/styles.scss public/css/styles.css",
     "css-watch": "npm run css-build -- --watch"
   },
   "keywords": [],
