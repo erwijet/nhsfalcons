@@ -45,12 +45,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/auth');
 });
 
-app.get('/', (req, res) => {
-    let token = '';
-    if (validate(req))
-        token = '?token=' + req.query.token;
-    res.redirect('/members' + token);
-});
+app.get('/', (req, res) => res.redirect('/members'));
 
 app.get('/showme', (req, res) => {
     if (validate(req))
