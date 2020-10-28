@@ -173,6 +173,11 @@ app.get('/admin/db', (req, res) => {
         res.render('admin', { isExplore: req.query.isExplore, urljson: req.query.obj || ''})
 });
 
+app.get('/admin/drawTable', (req, res) => {
+    let docs = JSON.parse(req.query.docs);
+    res.render('table', { docs });
+});
+
 app.post('/gsync/onSubmit', (req, res) => {
     console.log(req.body);
     res.sendStatus(200).json({

@@ -68,7 +68,8 @@ block body
         try { urlJson = JSON.parse($('#urljson').attr('value')); } catch {  }
 
         let initialJson = {
-            name: { '$regex': 'John Doe', '$options': 'i' },
+            active: true,
+            name: { '$regex': '', '$options': 'i' },
         }
 
         if (!urlJson._undefined)

@@ -1,0 +1,30 @@
+doctype html
+
+head
+    style.
+        table {
+            border-collapse: collapse
+        }
+        table, th, td {
+            border: 1px solid black
+        }
+
+body
+    -
+        let headers = [];
+        docs.forEach(doc => {
+            Object.keys(doc).forEach(elem => {
+                if (!headers.includes(elem))
+                    headers.push(elem)
+            });
+        });
+    table
+        tr
+            each key in headers
+                th= key
+        each doc in docs
+            - let docKeys = Object.keys(doc);
+            tr
+                each key in docKeys
+                    - let cellVal = doc[key];
+                        td= cellVal

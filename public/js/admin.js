@@ -31,7 +31,7 @@ function runQueryOnClick() {
     (async () => {
         let res = await $.ajax({
             method: 'POST',
-            url: 'http://api.nhsfalcons.com/raw/' + mode,
+            url: 'http://localhost:2020/raw/' + mode,
             data: {
                 auth: authToken,
                 query: editor.get() // load user-defined JSON
@@ -40,10 +40,15 @@ function runQueryOnClick() {
 
         if (res.code == 401)
             globalThis.location.replace('/auth?redirect=/admin/db?obj=' + editor.getText() + '&mode=' + new URLSearchParams(globalThis.location.search) .get('mode'));
-        console.log(res);
 
-        if (res.docs)
+        if (res.docs) {
+            if (editor.get()['@returns']) {
+                if (editor.get()['@returns'].asTable) {
+                    globalThis.location.replace('/admin/drawTable?docs=' + JSON.stringify(res.docs));
+                }
+            }
             resEditor.set(res.docs);
+        }
 
         if (res.code == 400)
             resEditor.set(res.msg);
