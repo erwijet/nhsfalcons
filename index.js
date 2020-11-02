@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const path = require('path');
 const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
+const bson = require('bson');
 const querystring = require('querystring'); // parse url json
 const cookieParser = require('cookie-parser');
 const getJSON = require('get-json'); // load json from url
@@ -174,7 +175,7 @@ app.get('/admin/db', (req, res) => {
 });
 
 app.get('/admin/drawTable', (req, res) => {
-    let docs = JSON.parse(req.query.docs);
+    let docs = bson.deserialize(req.query.docs);
     res.render('table', { docs });
 });
 
