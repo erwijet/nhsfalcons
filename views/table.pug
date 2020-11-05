@@ -12,12 +12,22 @@ head
 body
     -
         let headers = [];
-        docs.forEach(doc => {
-            Object.keys(doc).forEach(elem => {
-                if (!headers.includes(elem))
-                    headers.push(elem)
+        if (!Array.isArray(docs)) {
+            docs.forEach(doc => {
+                Object.keys(doc).forEach(elem => {
+                    if (!headers.includes(elem))
+                        headers.push(elem)
+                });
             });
-        });
+        } else {
+            if (docs.length > 0)
+                headers.push(docs.shift())
+            let newDocs = [];
+            for (let elem of docs) {
+                newDocs.push(JSON.parse(`{ "${headers[0]}": "${elem}" }`))
+            }
+            docs = newDocs
+        }
     table
         tr
             each key in headers
@@ -27,4 +37,5 @@ body
             tr
                 each key in docKeys
                     - let cellVal = doc[key];
-                        td= cellVal
+                    - if (Array.isArray(cellVal)) cellVal = cellVal.length;
+                    td= cellVal

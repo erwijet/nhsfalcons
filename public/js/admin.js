@@ -27,7 +27,7 @@ function runQueryOnClick() {
 
     $('#runQueryBtn').addClass('is-loading');
     setLoading('results', true);
-
+    
     (async () => {
         let res = await $.ajax({
             method: 'POST',

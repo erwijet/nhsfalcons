@@ -175,7 +175,7 @@ app.get('/admin/db', (req, res) => {
 });
 
 app.get('/admin/drawTable', (req, res) => {
-    let docs = bson.deserialize(req.query.docs);
+    let docs = JSON.parse(req.query.docs);
     res.render('table', { docs });
 });
 
