@@ -12,7 +12,7 @@ head
 body
     -
         let headers = [];
-        if (!Array.isArray(docs)) {
+        if (typeof docs[0] == 'object') {
             docs.forEach(doc => {
                 Object.keys(doc).forEach(elem => {
                     if (!headers.includes(elem))
