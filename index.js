@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const path = require('path');
 const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
-const https = require('https');
 const cookieParser = require('cookie-parser');
 const getJSON = require('get-json'); // load json from url
 

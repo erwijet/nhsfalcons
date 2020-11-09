@@ -62,7 +62,7 @@ function runQueryOnClick() {
 function exportOnClick() {
 
     let usp = new URLSearchParams(globalThis.location.search);
-    let newAddr = '/admin/db?obj=' + editor.getText() + '&mode=' + usp.get('mode');
+    let newAddr = '/admin/db?obj=' + encodeURIComponent(editor.getText()) + '&mode=' + usp.get('mode');
 
     alert('JSON saved to url. Copy & Save');
     globalThis.location.replace(newAddr);
