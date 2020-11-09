@@ -6,13 +6,9 @@ const morgan = require('morgan');
 const path = require('path');
 const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
-const fs = require('fs');
 const https = require('https');
 const cookieParser = require('cookie-parser');
 const getJSON = require('get-json'); // load json from url
-
-const sslKey = fs.readFileSync(__dirname + '/signed.key');
-const sslCrt = fs.readFileSync(__dirname + '/signed.crt');
 
 const validate = require('./validate');
 const today = require('./today');
@@ -188,9 +184,6 @@ app.post('/gsync/onSubmit', (req, res) => {
         code: 200,
         'msg': 'ok'
     });
-})
+});
 
-https.createServer({ key: sslKey, cert: sslCrt }, app)
-    .listen(PORT);
-
-// app.listen(PORT, console.log(`Server listening on port ${PORT}`));
+app.listen(PORT, console.log(`Server listening on port ${PORT}`));
