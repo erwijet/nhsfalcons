@@ -11,7 +11,8 @@ resEditor.set({  })
 
 function runQueryOnClick() {
     let failed = false;
-    let mode = new URLSearchParams(globalThis.location.search) .get('mode');
+    let usp = new URLSearchParams(globalThis.location.search);
+    let mode = usp.get('mode');
 
     try {
         editor.get(); // attempt to parse
@@ -44,7 +45,10 @@ function runQueryOnClick() {
         if (res.docs) {
             if (editor.get()['@returns']) {
                 if (editor.get()['@returns'].asTable) {
-                    globalThis.location.replace('/admin/drawTable?docs=' + JSON.stringify(res.docs));
+                    if (usp.get('autoexec') != 'true')
+                        globalThis.window.open('/admin/drawTable?docs=' + JSON.stringify(res.docs));
+                    else
+                        globalThis.location.replace('/admin/drawTable?docs=' + JSON.stringify(res.docs));   
                 }
             }
             resEditor.set(res.docs);
@@ -75,7 +79,8 @@ function viewDocsOnClick() {
 $(() => {
     // show selected mode
 
-    let selection = new URLSearchParams(globalThis.location.search) .get('mode');
+    let usp = new URLSearchParams(globalThis.location.search);
+    let selection = usp.get('mode');
     console.log(selection);
     $(`#menu-` + new URLSearchParams(globalThis.location.search) .get('mode')).addClass('is-active');
 
@@ -83,4 +88,7 @@ $(() => {
     for (let mode of ['query', 'remove', 'agg']) {
         $(`#menu-${mode}`).find('a').attr('href', `/admin/db?mode=${mode}&obj=${editor.getText()}`)
     };
+
+    if (usp.get('autoexec') == 'true' && usp.get('mode') == 'query')
+        runQueryOnClick(); // auto run find query. Illegal for remove queries
 });

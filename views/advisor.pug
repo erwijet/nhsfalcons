@@ -1,0 +1,23 @@
+extends layout
+
+block body
+    .hero.is-info.is-bold.is-medium
+        .hero-body
+            .container
+                .title Advisor Page
+                .subtitle Hey, Ms Reeves!
+    - let keys = Object.keys(groups)
+    each key in keys
+        article.panel.is-info(style='margin: 5%')
+            p.panel-heading= key
+            - let thisSet = groups[key];
+            each link in thisSet
+                a.panel-block(href=link.url)
+                    span.panel-icon
+                        i.fas.fa-link(aria-hidden='true')
+                    |#{link.name}
+                    if link.warning
+                        span.tag.is-danger(style='margin-left: 1%')
+                            span.icon
+                                i.fas.fa-exclamation-triangle
+                            | &nbsppermanent

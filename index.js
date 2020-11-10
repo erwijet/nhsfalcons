@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const getJSON = require('get-json'); // load json from url
 
+const advisorLinks = require('./public/js/advisorlinks.json');
 const validate = require('./validate');
 const today = require('./today');
 const rand = require('./random');
@@ -160,9 +161,19 @@ app.get('/rdr/:name', (req, res) => {
                 return;
             }
 
-            res.redirect(308, entry.url); // redirect with code 308
+            let script = `
+                setTimeout(() => globalThis.location.replace(${entry.url}), 10);
+            `;
+
+            // res.end(`<script>${script}</script>`)
+
+            res.redirect(307, entry.url); // redirect with code 308
         });
     })();
+});
+
+app.get('/advisor', (req, res) => {
+    res.render('advisor', { groups: advisorLinks });
 });
 
 app.get('/admin/db', (req, res) => {
