@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const getJSON = require('get-json'); // load json from url
 
 const advisorLinks = require('./public/js/advisorlinks.json');
+const advauth = require('./advauth');
 const validate = require('./validate');
 const today = require('./today');
 const rand = require('./random');
@@ -30,6 +31,14 @@ app.use('/live', live); // configure live middleware
 app.set('view engine', 'pug');
 
 app.get('/auth', (req, res) => {
+    if (req.query.specialAuth == 'adv') {
+        if (req.query.guess == process.env.ADV_HASH) {
+            res.cookie('nhsfalconsadvauth', advauth(), { maxAge: 60 * 60 * 1000 });
+            res.redirect(req.query.redirect);
+            return;
+        }
+    }
+
     if (req.query.guess == process.env.HASH) {
         res.cookie('nhsfalconsauth', today(), { maxAge: 60 * 60 * 1000 }); // administer cookie. 1 hr
         res.redirect(req.query.redirect); 
@@ -173,7 +182,10 @@ app.get('/rdr/:name', (req, res) => {
 });
 
 app.get('/advisor', (req, res) => {
-    res.render('advisor', { groups: advisorLinks });
+    if (req.cookies.nhsfalconsadvauth != advauth())
+        res.redirect('/auth?specialAuth=adv&redirect=/advisor');
+    else
+        res.render('advisor', { groups: advisorLinks });
 });
 
 app.get('/admin/db', (req, res) => {

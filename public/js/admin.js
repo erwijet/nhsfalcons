@@ -12,7 +12,7 @@ resEditor.set({  })
 
 function runQueryOnClick() {
     let failed = false;
-    let usp = new URLSearchParams(globalThis.location.search);
+    // let usp = new URLSearchParams(globalThis.location.search);
     let mode = usp.get('mode');
 
     try {
@@ -66,7 +66,7 @@ function runQueryOnClick() {
 
 function exportOnClick() {
 
-    let usp = new URLSearchParams(globalThis.location.search);
+    // let usp = new URLSearchParams(globalThis.location.search);
     let newAddr = '/admin/db?obj=' + encodeURIComponent(editor.getText()) + '&mode=' + usp.get('mode');
 
     alert('JSON saved to url. Copy & Save');
@@ -80,7 +80,7 @@ function viewDocsOnClick() {
 $(() => {
     // show selected mode
 
-    let usp = new URLSearchParams(globalThis.location.search);
+    // let usp = new URLSearchParams(globalThis.location.search);
     let selection = usp.get('mode');
     console.log(selection);
     $(`#menu-` + new URLSearchParams(globalThis.location.search) .get('mode')).addClass('is-active');
