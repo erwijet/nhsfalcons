@@ -4,7 +4,7 @@
 let authToken;
 
 if (globalThis.cookie.split(';').length > 0)
-    authToken = globalThis.document.cookie.split(';')[0].split('=')[1];
+    authToken = globalThis.document.cookie.split(';')[1].split('=')[1];
 else
     authToken = globalThis.document.cookie.split('=')[1];
 let usp = new URLSearchParams(globalThis.location.search);
