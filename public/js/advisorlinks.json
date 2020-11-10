@@ -33,13 +33,18 @@
     ],
     "Highway to the Danger Zone (Administrative Stuff)": [
         {
-            "url": "http://www.nhsfalcons.com/admin/db?obj=%7B%0A%20%20%22%24comment%22%3A%20%5B%0A%20%20%20%20%22Summary%3A%20Removes%20all%20members%20who%20are%20currently%20active%20and%20on%20probation%22%2C%0A%20%20%20%20%22%22%2C%0A%20%20%20%20%22**WARNING!!**%20By%20clicking%20execute%20you%20will%20be%20performing%20an%20action%22%2C%0A%20%20%20%20%22%20that%20is%20not%20reversable.%20Once%20a%20member%20is%20deleted%2C%20there%20is%20not%20path%20to%22%2C%0A%20%20%20%20%22recovery.%20I%20recommend%20*MARKING%20AS%20INACTIVE*%20instead%20of%20deleting%2C%20as%20this%22%2C%0A%20%20%20%20%22is%20a%20safe%20way%20of%20effectivly%20removing%20the%20member%20from%20the%20website.%22%0A%20%20%5D%2C%0A%20%20%22active%22%3A%20true%2C%0A%20%20%22probation%22%3A%20true%0A%7D&mode=remove",
-            "name": "Remove currently probated members",
+            "url": "/rdr/delete_probated",
+            "name": "Delete probated members",
             "warning": true
         },
         {
-            "url": "",
-            "name": "Remove currently inactive members",
+            "url": "/rdr/delete_inactive",
+            "name": "Delete current inactive members",
+            "warning": true
+        },
+        {
+            "url": "/rdr/delete_active",
+            "name": "Delete current active members",
             "warning": true
         }
     ]
