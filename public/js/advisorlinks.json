@@ -1,11 +1,11 @@
 {
     "Member Attendance": [
         {
-            "url": "/rdr/all_absent",
+            "url": "/rdr/meeting_attendance_absent_autoexec",
             "name": "Members Absent from Meetings (Snapshot Table)"
         },
         {
-            "url": "/rdr/all_attendance",
+            "url": "/rdr/meeting_attendance_all_autoexec",
             "name": "All Member Meeting Attendance (Snapshot Table)"
         },
         {
