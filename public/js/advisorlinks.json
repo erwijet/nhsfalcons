@@ -8,7 +8,7 @@
             "url": "/rdr/meeting_attendance_all_autoexec",
             "name": "All Member Meeting Attendance (Snapshot Table)"
         },
-        {
+        { 
             "url": "/events",
             "name": "View Events"
         }

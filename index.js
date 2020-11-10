@@ -51,6 +51,7 @@ app.get('/auth', (req, res) => {
 
 app.get('/logout', (req, res) => {
     res.clearCookie('nhsfalconsauth');
+    res.clearCookie('nhsfalconsadvauth');
     res.redirect('/auth');
 });
 
