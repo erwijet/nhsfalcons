@@ -33,6 +33,7 @@ app.set('view engine', 'pug');
 app.get('/auth', (req, res) => {
     console.log('testing specialAuth...', req.query.guess, process.env.ADV_HASH, req.query.guess == process.env.ADV_HASH);
     if (req.query.guess == process.env.ADV_HASH) {
+        res.clearCookie('nhsfalconsauth');
         res.cookie('nhsfalconsadvauth', advauth(), { maxAge: 60 * 60 * 1000 });
         res.cookie('nhsfalconsauth', today(), { maxAge: 60 * 60 * 1000 }); // administer cookie. 1 hr
         res.redirect(req.query.redirect);
