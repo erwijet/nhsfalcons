@@ -2,7 +2,7 @@
 // use jsoneditor (npmjs.com/package/jsoneditor)
 
 const authToken = globalThis.document.cookie.split('=')[1];
-if (!authToken) globalThis.location.replace('/auth?redirect=/admin/db?obj=' + editor.getText());
+if (!authToken) globalThis.location.replace('/auth?redirect=/admin/db?obj=' + '&mode=' + usp.get('mode') + usp.get('autoexec') == 'true' ? '&autoexec=true' : '');
 
 // Setup JSON response container
 let resContainer = document.getElementById('jsonresult');
