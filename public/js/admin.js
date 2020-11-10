@@ -3,10 +3,11 @@
 
 let authToken;
 
-if (globalThis.cookie.split(';').length > 0)
+if (globalThis.document.cookie.split(';').length > 0)
     authToken = globalThis.document.cookie.split(';')[1].split('=')[1];
 else
     authToken = globalThis.document.cookie.split('=')[1];
+    
 let usp = new URLSearchParams(globalThis.location.search);
 if (!authToken) globalThis.location.replace('/auth?redirect=/admin/db?obj=' + '&mode=' + usp.get('mode') + usp.get('autoexec') == 'true' ? '&autoexec=true' : '');
 
