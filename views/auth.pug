@@ -27,6 +27,8 @@ html
                                             img.is-rounded(src='/img/bird.png')
                                         .container(style='margin: 10%')
                                             h1.has-text-grey-darker.title Westosha Central NHS
+                                            if specialAuth=="adv"
+                                                h3.has-text-grey-darker.subtitle Elevated permissions required. Please sign in as an Advisor
                                             form#box(method='get', target='_self' onsubmit="return onSubmit(this);$('#keybar').val('')")
                                                 .field.has-addons.is-expanded
                                                     .control.has-icons-left.is-expanded#main-field
@@ -39,6 +41,9 @@ html
                                                             i.fas.fa-key
                                                     .control.is-hidden
                                                         input.input(name="redirect", value=redirect)
+                                                    if specialAuth
+                                                        .control.is-hidden
+                                                            input.input(name="specialAuth", value=specialAuth)
                                                     .control
                                                         button.button.is-dark#submitbtn
                                                             span.icon.is-small

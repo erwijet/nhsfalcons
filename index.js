@@ -31,12 +31,12 @@ app.use('/live', live); // configure live middleware
 app.set('view engine', 'pug');
 
 app.get('/auth', (req, res) => {
-    if (req.query.specialAuth == 'adv') {
-        if (req.query.guess == process.env.ADV_HASH) {
-            res.cookie('nhsfalconsadvauth', advauth(), { maxAge: 60 * 60 * 1000 });
-            res.redirect(req.query.redirect);
-            return;
-        }
+    console.log('testing specialAuth...', req.query.guess, process.env.ADV_HASH, req.query.guess == process.env.ADV_HASH);
+    if (req.query.guess == process.env.ADV_HASH) {
+        res.cookie('nhsfalconsadvauth', advauth(), { maxAge: 60 * 60 * 1000 });
+        res.cookie('nhsfalconsauth', today(), { maxAge: 60 * 60 * 1000 }); // administer cookie. 1 hr
+        res.redirect(req.query.redirect);
+        return;
     }
 
     if (req.query.guess == process.env.HASH) {
@@ -45,7 +45,7 @@ app.get('/auth', (req, res) => {
     }
     else {
         rand.advance(); // generate seeded token
-        res.render('auth', { redirect: req.query.redirect || '/' });
+        res.render('auth', { redirect: req.query.redirect || '/', specialAuth: req.query.specialAuth || null });
     }
 });
 
