@@ -3,13 +3,16 @@
 
 let authToken;
 
+let usp = new URLSearchParams(globalThis.location.search);
+
 if (globalThis.document.cookie.split(';').length > 1)
     authToken = globalThis.document.cookie.split(';')[1].split('=')[1];
-else
+else if (globalThis.document.cookie.split('=').length > 1)
     authToken = globalThis.document.cookie.split('=')[1];
-
-let usp = new URLSearchParams(globalThis.location.search);
-if (!authToken) globalThis.location.replace('/auth?redirect=/admin/db?obj=' + '&mode=' + usp.get('mode') + usp.get('autoexec') == 'true' ? '&autoexec=true' : '');
+else {
+    let { search, pathname } = globalThis.location; 
+    globalThis.location.replace(`/auth?redirect=${pathname}${search}`);
+}
 
 // Setup JSON response container
 let resContainer = document.getElementById('jsonresult');
