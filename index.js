@@ -295,7 +295,7 @@ app.post('/misc/coop-email', (req, res) => {
             return;
         }
 
-        res.render('liveThanks'); // use the checkmark from /live here. Total theft, ngl
+        res.render('liveThanks'); // use the checkmark from /live here. Total theft, ngl 
     });
 });
 
