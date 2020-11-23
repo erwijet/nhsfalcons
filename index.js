@@ -7,6 +7,7 @@ const path = require('path');
 const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const nodemailer = require('nodemailer');
 const getJSON = require('get-json'); // load json from url
 
 const advisorLinks = require('./public/js/advisorlinks.json');
@@ -207,6 +208,94 @@ app.post('/gsync/onSubmit', (req, res) => {
     res.sendStatus(200).json({
         code: 200,
         'msg': 'ok'
+    });
+});
+
+app.get('/misc/coop-email', (req, res) => {
+    if (req.cookies.nhsfalconsadvauth != advauth())
+        res.redirect('/auth?specialAuth=adv&redirect=/misc/coop-email');
+    else
+        res.render('coopEmail.pug');
+});
+
+app.post('/misc/coop-email', (req, res) => {
+    if (req.cookies.nhsfalconsauth != today()) {
+        res.redirect('/auth?redirect=/misc/coop-email')
+    }
+
+    // check that all required parameters are present
+
+    let failed = false;
+
+    const { to, vidTitle, nhsMember, ytLink, gdLink } = req.body;
+    [to, vidTitle, nhsMember, ytLink, gdLink].forEach(param => {
+        if (typeof param != 'string')
+            failed = true;
+    });
+
+    if (failed) {
+        res.redirect('/misc/coop-email');
+        return;
+    }
+
+    const email = process.env.EMAIL;
+    const password = process.env.EMAIL_PASS;
+
+    let transport;
+
+    function updateTransport() {
+        transport = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: email,
+                pass: password
+            }
+        });
+    }
+
+    function sendMail(recipient, text, cb) {
+        let msg = {
+            from: email,
+            to: recipient,
+            subject: 'NHS Video Submission Finished',
+            text: text,
+        };
+
+        transport.sendMail(msg, err => cb(err));
+    }
+
+    updateTransport();
+
+    let message = `
+        Hello! 
+
+        Your video request for "${vidTitle}" has finished up.
+        
+        The video is avalible for download from Google Drive here: ${gdLink}.
+        The video is also uploaded to the Westosha Central COOP Video Youtube Channel so it can be shared easily: ${ytLink}.
+
+        The NHS Member who created your video was **${nhsMember}**.
+        Please feel free to reach out if you have any questions or concerns.
+
+        Thank you so much for your video submission; all videos go to helping NHS members fulfill their volunteer hour requirements, and allow for Westosha Central NHS to help out in the community.
+        If you would like to request and *additional* video, you can do so by filling out the Google Form at http://coop.nhsfalcons.com
+
+        Thanks!! :D
+        
+        Tyler Holewinski
+
+        President, 2020-2021 NHS
+        e: tyler@nhsfalcons.com
+        p: (719) 822 5878
+    `;
+
+    sendMail(to, message, err => { 
+        if (err) {
+            res.end(err.message);
+            return;
+        }
+
+        res.render('liveThanks'); // use the checkmark from /live here. Total theft, ngl
     });
 });
 

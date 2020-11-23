@@ -1,0 +1,62 @@
+extends layout
+include hide-scrollbar
+
+block body
+    .hero.is-medium.is-maroon.is-bold
+        .hero-body
+            .container
+                .title NHS Supplemental Video COOP Project
+                .subtitle Email Notification Form
+    .box(style='margin: 2%; margin-left: 10%; margin-right: 10%; padding: 3%; padding-top: 4%')
+        form#mainForm(method='POST')
+            .field.is-horizontal
+                .field-label.is-normal
+                    label.label Recipient
+                .field-body
+                    .field
+                        p.control.has-icons-left.is-expanded
+                            input.input(name='to', type="email", placeholder="teacher@school.k12.wi.us")
+                            span.icon.is-small.is-left
+                                i.fas.fa-envelope
+            .field.is-horizontal
+                .field-label.is-normal
+                    label.label Video Details
+                .field-body
+                    .field
+                        p.control.has-icons-left.is-expanded
+                            input.input(name='vidTitle', type="text", placeholder="Video Title")
+                            span.icon.is-small.is-left
+                                i.fas.fa-video
+                    .field
+                        p.control.has-icons-left.is-expanded
+                            input.input(name='nhsMember', type="text", placeholder="NHS Member Name")
+                            span.icon.is-small.is-left
+                                i.fas.fa-user
+            //- spacing
+            div(style='margin: 2%')
+            .field.is-horizontal
+                .field-label.is-normal
+                    label.label Video Links
+                .field-body
+                    .field
+                        p.control.has-icons-left.is-expanded
+                            input.input(name='ytLink', type='text', placeholder='YouTube Link')
+                            span.icon.is-small.is-left
+                                i.fab.fa-youtube
+                    .field
+                        p.control.has-icons-left.is-expanded
+                            input.input(name='gdLink', type="text", placeholder='Google Drive Link')
+                            span.icon.is-small.is-left
+                                i.fab.fa-google-drive
+            //- spacing
+            div(style='margin: 2%')
+            .field.is-horizontal
+                .field-label
+                    //- spacing
+                .field-body
+                    .field
+                        .control
+                            button.button.is-maroon.is-rounded(style='float: right; padding-left: 10%; padding-right: 10%; padding-top: 1%; padding-bottom: 1%')
+                                span Send Email
+                                span.icon.is-small
+                                    i.fas.fa-paper-plane
