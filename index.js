@@ -318,7 +318,7 @@ function nextVideoId() {
     return str;
 }
 
-app.post('/misc/nhs-video-request', (req, res) => {
+app.get('/misc/nhs-video-request', (req, res) => {
     const GAS_MAIL_KEY = process.env.GAS_MAIL_KEY;
     const PROVIDED_KEY = req.body.shift();
     if (PROVIDED_KEY != GAS_MAIL_KEY) {
