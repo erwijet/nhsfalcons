@@ -218,6 +218,31 @@ app.get('/misc/coop-email', (req, res) => {
         res.render('coopEmail.pug');
 });
 
+function doMailSend(msg, cb) {
+    const email = process.env.EMAIL;
+    const password = process.env.EMAIL_PASS;
+
+    let transport;
+
+    function updateTransport() {
+        transport = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: email,
+                pass: password
+            }
+        });
+    }
+
+    function sendMail(msg, cb) {
+        transport.sendMail(msg, err => cb(err));
+    }
+
+    updateTransport();
+
+    sendMail(msg, err => cb); // with "error", execute callback
+}
+
 app.post('/misc/coop-email', (req, res) => {
     if (req.cookies.nhsfalconsauth != today()) {
         res.redirect('/auth?redirect=/misc/coop-email')
@@ -238,35 +263,7 @@ app.post('/misc/coop-email', (req, res) => {
         return;
     }
 
-    const email = process.env.EMAIL;
-    const password = process.env.EMAIL_PASS;
-
-    let transport;
-
-    function updateTransport() {
-        transport = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: email,
-                pass: password
-            }
-        });
-    }
-
-    function sendMail(recipient, text, cb) {
-        let msg = {
-            from: email,
-            to: recipient,
-            subject: 'NHS Video Submission Finished',
-            text: text,
-        };
-
-        transport.sendMail(msg, err => cb(err));
-    }
-
-    updateTransport();
-
-    let message = `
+    let text = `
         Hello! 
 
         Your video request for "${vidTitle}" has finished up.
@@ -289,13 +286,92 @@ app.post('/misc/coop-email', (req, res) => {
         p: (719) 822 5878
     `;
 
-    sendMail(to, message, err => { 
+    let msg = {
+        from: email,
+        to: recipient,
+        subject: 'NHS Video Submission Finished',
+        text,
+    };
+
+    doMailSend(to, msg, err => {
         if (err) {
             res.end(err.message);
             return;
         }
 
-        res.render('liveThanks'); // use the checkmark from /live here. Total theft, ngl 
+        res.render('liveThanks'); // show green confirmation circle
+    });
+});
+
+function nextVideoId() {
+    const FILEPATH = __dirname + '/num.txt';
+    let num = Number.parseInt(fs.readFileSync(FILEPATH));
+    fs.writeFileSync(FILEPATH, ++num);
+    
+    
+    // pad with prefixed zeros (total digits: 4)
+    let str = num.toString();
+    while (str.length < 4) {
+      str = '0' + str;
+    }  
+  
+    return str;
+}
+
+app.post('/misc/nhs-video-request', (req, res) => {
+    const GAS_MAIL_KEY = process.env.GAS_MAIL_KEY;
+    if (req.body.shift() != GAS_MAIL_KEY) {
+        res.statusCode = 401; // rejected; forbidden (not authed)
+        res.end();
+        return; // stop processing request
+    }
+
+    let name = req.body.shift();
+    let title = req.body.shift();
+    let isWestosha = req.body.shift() == "Yes";
+    
+    let westoshaTeacher = null;
+    let westoshaClass = null;
+    let westoshaRuntime = null;
+    
+    if (isWestosha) {
+      westoshaTeacher = req.body.shift();
+      westoshaClass = req.body.shift();
+      westoshaRuntime = req.body.shift();
+    }
+    
+    let videoConcept = req.body.shift();
+    let dueDate = req.body.shift();
+
+    let westoshaNote = `
+  > **NOTE**: This is in line with a westosha class
+  >
+  > Teacher: ${westoshaTeacher}
+  > Class: ${westoshaClass} @[${westoshaRuntime}]
+  `;
+  
+  const backticks = '```';
+  
+  let msg = {
+    from: process.env.EMAIL,
+    to: TRELLO_EMAIL,
+    subject: title + ' (Z-' + nextVideoId() + ')',
+    text: `
+${backticks}
+TITLE: **${title}**
+BY: ${name}
+DUE ON: ${dueDate}
+${backticks}
+      
+concept: _${videoConcept}_
+${isWestosha ? westoshaNote : '' }
+    `
+  }
+    sendMail('tylerholewinski+c44h3kiab6lvxjshucoz@boards.trello.com', msg, err => {
+        if (err)
+            res.statusCode = 400; // bad request
+
+        res.end(); // success
     });
 });
 
