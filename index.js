@@ -318,35 +318,29 @@ function nextVideoId() {
     return str;
 }
 
-app.use(express.json()); // use JSON body parsing
+// app.use(express.json()); // use JSON body parsing
 
-app.post('/misc/nhs-video-request', (req, res) => {
-    const GAS_MAIL_KEY = process.env.GAS_MAIL_KEY;
-    const obj = JSON.parse(req.body);
-    console.log(obj.shift());
-    console.log(req.body.shift());
-    const PROVIDED_KEY = req.body.shift();
+app.get('/misc/nhs-video-request', (req, res) => {
+    // console.log(GAS_MAIL_KEY, PROVIDED_KEY, GAS_MAIL_KEY == PROVIDED_KEY);
 
-    console.log(GAS_MAIL_KEY, PROVIDED_KEY, GAS_MAIL_KEY == PROVIDED_KEY);
+    // if (PROVIDED_KEY != GAS_MAIL_KEY) {
+    //     res.statusCode = 401; // rejected; forbidden (not authed)
+    //     res.end();
+    //     return; // stop processing request
+    // }
 
-    if (PROVIDED_KEY != GAS_MAIL_KEY) {
-        res.statusCode = 401; // rejected; forbidden (not authed)
-        res.end();
-        return; // stop processing request
-    }
-
-    let name = req.body.shift();
-    let title = req.body.shift();
-    let isWestosha = req.body.shift() == "Yes";
+    let name = req.query.name;
+    let title = req.query.title;
+    let isWestosha = req.query.isWestosha == "Yes";
     
     let westoshaTeacher = null;
     let westoshaClass = null;
     let westoshaRuntime = null;
     
     if (isWestosha) {
-      westoshaTeacher = req.body.shift();
-      westoshaClass = req.body.shift();
-      westoshaRuntime = req.body.shift();
+      westoshaTeacher = req.query.westoshaTeacher
+      westoshaClass = req.query.westoshaClass;
+      westoshaRuntime = req.query.westoshaTeacher;
     }
     
     let videoConcept = req.body.shift();
