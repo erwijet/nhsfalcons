@@ -318,9 +318,17 @@ function nextVideoId() {
     return str;
 }
 
-app.get('/misc/nhs-video-request', (req, res) => {
+app.use(express.json()); // use JSON body parsing
+
+app.post('/misc/nhs-video-request', (req, res) => {
     const GAS_MAIL_KEY = process.env.GAS_MAIL_KEY;
+    const obj = JSON.parse(req.body);
+    console.log(obj.shift());
+    console.log(req.body.shift());
     const PROVIDED_KEY = req.body.shift();
+
+    console.log(GAS_MAIL_KEY, PROVIDED_KEY, GAS_MAIL_KEY == PROVIDED_KEY);
+
     if (PROVIDED_KEY != GAS_MAIL_KEY) {
         res.statusCode = 401; // rejected; forbidden (not authed)
         res.end();
