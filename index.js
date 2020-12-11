@@ -243,6 +243,10 @@ function doMailSend(msg, cb) {
     sendMail(msg, err => cb); // with "error", execute callback
 }
 
+app.get('/misc/tutoringVideoArchive', (req, res) => {
+    res.render('help');
+});
+
 app.post('/misc/coop-email', (req, res) => {
     if (req.cookies.nhsfalconsauth != today()) {
         res.redirect('/auth?redirect=/misc/coop-email')
