@@ -2,3 +2,4 @@ node_modules/
 public/css/styles.css
 .env
 num.txt
+api.version

@@ -24,9 +24,14 @@ block body
                                 i.fas.fa-book
                             p View MongoDB Documentation
                         .button.is-dark.is-outlined(onclick='exportOnClick()')
-                           span.icon.is-left
-                            i.fas.fa-link
-                           p Export
+                            span.icon.is-left
+                                i.fas.fa-link
+                            p Permalink
+                        .button.is-dark.is-outlined(onclick='$("#shortlink-modal").addClass("is-active");')
+                            span.icon.is-left
+                                i.fas.fa-link
+                            p Shortlink
+
             .level-right
                 .level-item
                     .tabs
@@ -44,7 +49,52 @@ block body
                         p Execute
     .box(style='margin: 2%; height: 500px;')
         #jsoneditor(style='width: 100%; height: 100%;')
+    .modal#shortlink-modal
+        .modal-background(onClick='$(this).parent().removeClass("is-active")')
+        .modal-card
+            header.modal-card-head
+                p.modal-card-title Create Shortlink
+            section.modal-card-body
+                .field.has-addons
+                    .control(style='width:100%')
+                        button.button.is-outlined.is-dark.is-fullwidth(disabled) http://nhsfalcons.com/rdr/
+                    .control(style='width:100%')
+                        input.input.is-outlined.is-danger#shortlink-textbox(onChange='if (new RegExp("^[a-zA-Z0-9-_]+$") .test($(this).val()) != true) { $(this).addClass("is-danger"); $("#go-create-link").attr("disabled", "disabled"); } else { $(this).removeClass("is-danger"); $(this).addClass("is-success"); $("#go-create-link").removeAttr("disabled"); }')
+                .field
+                    .control
+                        label.checkbox
+                            input#autoexec(type="checkbox")
+                            |&nbsp&nbspExecute Automatically 
+                span.tag#shortlink-tag Shortlink Path Must Adhere to Regular Expression /^[a-zA-Z0-9-_]+$/
+            footer.modal-card-foot
+                button.button.is-primary#go-create-link(onClick='testCreateLink();', disabled) Create ShortLink
+                button.button(onClick='$("#shortlink-modal").removeClass("is-active");') Done
+    .modal#permalink-modal
+        .modal-background(onclick='$(this).parent().removeClass("is-active")')
+        .modal-card
+            header.modal-card-head
+                p.modal-card-title Script Permalink
+            section.modal-card-body
+                .field.has-addons
+                    .control(style='width:100%')
+                        input.input.is-outlined.is-dark#permalink-textbox(disabled, type='text').is-fullwidth
+                    .control
+                        .button.is-outlined.is-dark(onclick='copyPermalink();')
+                            span.icon
+                                i.fas.fa-copy
 
+                //- .field.has-addons
+                //-     .control.is-fullwidth
+                //-         label.label Permalink
+                //-         input.input.is-fullwidth(disabled, type='text')
+                //-     .control
+                //-         label.label &nbsp
+                //-         .button.is-dark.is-outlined
+                //-             span.icon
+                //-                 i.fas.fa-copy
+
+            footer.modal-card-foot
+                button.button(onclick='$("#permalink-modal").removeClass("is-active");') Done
     .modal#results
         .modal-background(onclick='$(this).parent().removeClass("is-active")')
         .modal-content
