@@ -13,6 +13,28 @@
             "name": "View Events"
         }
     ],
+    "NHS Proac Video Project": [
+        {
+            "url": "https://www.youtube.com/channel/UCMjwA94PI9d20ha-ES6_aGg/videos",
+            "name": "YouTube Page"
+        },
+        {
+            "url": "/rdr/2020_proac_report_autoexec",
+            "name": "2020 Contribution Report (semesterly)"
+        },
+        {
+            "url": "http://contribution.devboard.nhsfalcons.com",
+            "name": "2020 Contribution Report (aggregate)"
+        },
+        {
+            "url": "http://trello.nhsfalcons.com",
+            "name": "Trello Signup"
+        },
+        {
+            "url": "http://devboard.nhsfalcons.com",
+            "name": "Trello Development Board"
+        }
+    ],
     "Other Resources": [
         {
             "url": "https://classroom.google.com/u/0/c/MTI3Njg2NDYyNDc1",
