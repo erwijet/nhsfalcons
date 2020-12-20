@@ -112,7 +112,7 @@ async function createShortlink(name, url) {
 }
 
 function testCreateLink() {
-    const newAddr = 'http://nhsfalcons.com/admin/db?obj=' + encodeURIComponent(editor.getText()) + '&mode=' + usp.get('mode');
+    let newAddr = 'http://nhsfalcons.com/admin/db?obj=' + encodeURIComponent(editor.getText()) + '&mode=' + usp.get('mode');
     if ($('#autoexec').is(':checked')) newAddr += '&autoexec=true';
     const name = $('#shortlink-textbox').val();
 
