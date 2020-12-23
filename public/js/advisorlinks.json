@@ -13,22 +13,22 @@
             "name": "View Events"
         }
     ],
-    "NHS Proac Video Project": [
+    "NHS Video Project": [
+        {
+            "url": "/rdr/vid_contribution_table_autoexec",
+            "name": "Member Contribution & Hours Earned (Snapshot Table)"
+        },
         {
             "url": "http://archive.nhsfalcons.com",
-            "name": "Video Archive Spreadsheet"
+            "name": "Proac Video Spreadsheet"
+        },
+        {
+            "url": "http://coop-lookup.nhsfalcons.com",
+            "name": "COOP Video Spreadsheet"
         },
         {
             "url": "https://www.youtube.com/channel/UCMjwA94PI9d20ha-ES6_aGg/videos",
             "name": "YouTube Page"
-        },
-        {
-            "url": "/rdr/2020_proac_report_autoexec",
-            "name": "2020 Contribution Report (semesterly)"
-        },
-        {
-            "url": "http://contribution.devboard.nhsfalcons.com",
-            "name": "2020 Contribution Report (aggregate)"
         },
         {
             "url": "http://trello.nhsfalcons.com",
