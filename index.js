@@ -192,10 +192,17 @@ app.get('/advisor', (req, res) => {
 });
 
 app.get('/admin/db', (req, res) => {
+    if (req.cookies.nhsfalconsauth != today())
+        res.redirect('/auth?redirect=' + req.url.replace('?', encodeURIComponent('?')).replace('&', encodeURIComponent('&')));
+
     if (!req.query.mode || req.query.mode == 'undefined')
         res.redirect(`/admin/db?mode=query${ req.query.obj ? '&obj=' + req.query.obj : '' }${ req.query.isExplore ? '&isExplore=' + req.query.isExplore : '' }`);
     else
         res.render('admin', { isExplore: req.query.isExplore, urljson: req.query.obj || ''})
+});
+
+app.get('/admin/dtb', (req, res) => {
+    res.render('dynamicTableBuilder');
 });
 
 app.get('/admin/drawTable', (req, res) => {
