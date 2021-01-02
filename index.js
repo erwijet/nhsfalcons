@@ -163,6 +163,15 @@ app.get('/share/induction', (req, res) => {
 
 app.get('/test/:echo', (req, res) => res.end(req.params.echo));
 
+app.get('/dtb/:mode/:name', (req, res) => {
+    const { mode, name } = req.params;
+
+    if (mode != 'draw' && mode != 'edit') {
+        res.end('[DTB] Invalid Mode. DTB paths should be in the format of /dtb/:mode/:name, where :mode is edit or draw');
+        return;
+    }
+});
+
 app.get('/rdr/:name', (req, res) => {
     (async () => {
         console.log('starting...');
