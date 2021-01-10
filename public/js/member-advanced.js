@@ -196,6 +196,13 @@ function saveVolunteeringRow(volunteeringID, isCreate, isRemove) {
     let hours = $('#' + volunteeringID + '-hours').val();
     let district = $('#' + volunteeringID + '-district').val();
 
+    console.log(month, day, year, title, hours);
+
+    if (month == "" || day == "" || year == "" || title == "" || hours == "") {
+        alert('No empty values allowed. No action taken.');
+        return;
+    }
+
     if (isRemove) {
         $.ajax({
             type: 'POST',
@@ -241,7 +248,7 @@ function saveVolunteeringRow(volunteeringID, isCreate, isRemove) {
                                 let newHrs = 0;
                                 
                                 for (let volunteeringEvent of member.volunteering) {
-                                    newHrs += Number.parseInt(volunteeringEvent.hours);
+                                    newHrs += Number.parseFloat(volunteeringEvent.hours);
                                 }
 
                                 $('#main-table-hours').html(newHrs); // update total hours on main table
@@ -264,7 +271,7 @@ function saveVolunteeringRow(volunteeringID, isCreate, isRemove) {
                             
                             let newHrs = 0; 
                             for (let volunteeringEvent of json.member.volunteering) {
-                                newHrs += Number.parseInt(volunteeringEvent.hours);
+                                newHrs += Number.parseFloat(volunteeringEvent.hours);
                             }
 
                             $('#main-table-hours').html(newHrs); // update total hours on main table  
