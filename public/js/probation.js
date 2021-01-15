@@ -25,7 +25,7 @@ function loadMembers(hourReq, opCode) {
 
             selectedMembers = [];
 
-            if (hourReq && opCode) {
+            if (typeof hourReq != 'undefined' && opCode) {
 
                 for (let member of memberDocs) {
                     if (assertViaOpcode(member.hours, hourReq, opCode))
