@@ -1,0 +1,23 @@
+extends layout
+include mixins/loading-mixin
+
+block body
+    +loadable('main')
+        .box(style='margin: 2%')
+            .level
+                .level-left
+                    .level-item 
+                        h2.title Broken Member Objects
+                .level-right
+                    .level-item
+                        .button.is-success(onclick='diagnose()')
+                            span.icon
+                                i.fas.fa-flask
+                            span Diagnose
+        .box(style='margin: 2%')
+            table.table.is-fullwidth#memberTable
+                tbody.tbody
+                    tr
+                        th Name
+                        th Null Volunteering Objects (target: 0)
+    script(src='/js/memberHealth.js')

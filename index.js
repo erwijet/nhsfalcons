@@ -323,6 +323,15 @@ app.post('/misc/coop-email', (req, res) => {
     });
 });
 
+app.get('/health/members', (req, res) => {
+    if (req.cookies.nhsfalconsauth != today()) {
+        res.redirect('/auth?redirect=/health/members');
+        return;
+    }
+    
+    res.render('memberHealth');
+})
+
 function nextVideoId() {
     const FILEPATH = __dirname + '/num.txt';
     let num = Number.parseInt(fs.readFileSync(FILEPATH));
