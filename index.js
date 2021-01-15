@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const nodemailer = require('nodemailer');
 const getJSON = require('get-json'); // load json from url
+const { minify } = require('terser');
 
 const advisorLinks = require('./public/js/advisorlinks.json');
 const advauth = require('./advauth');
@@ -348,6 +349,42 @@ function nextVideoId() {
 }
 
 // app.use(express.json()); // use JSON body parsing
+
+app.get('/misc/jsmin', (req, res) => {
+    (async () => {
+    const config = {
+        compress: {
+          dead_code: true,
+          drop_console: true,
+          drop_debugger: true,
+          keep_classnames: false,
+          keep_fargs: true,
+          keep_fnames: false,
+          keep_infinity: false
+        },
+        mangle: {
+          eval: false,
+          keep_classnames: false,
+          keep_fnames: false,
+          toplevel: false,
+          safari10: false
+        },
+        module: false,
+        sourceMap: false,
+        output: {
+          comments: 'some'
+        }
+      };
+      
+      const code = req.body.code;
+    
+
+      // Minify the code with Terser
+      const minified = await minify(code, config);
+    
+      res.end(minified.code);
+    })();
+});
 
 app.get('/misc/nhs-video-request', (req, res) => {
     // console.log(GAS_MAIL_KEY, PROVIDED_KEY, GAS_MAIL_KEY == PROVIDED_KEY);

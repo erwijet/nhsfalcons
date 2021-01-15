@@ -26,7 +26,8 @@
     "pug": "^2.0.4",
     "pusher": "^3.0.1",
     "seedrandom": "^3.0.5",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "terser": "^5.5.1"
   },
   "devDependencies": {
     "bulma": "^0.8.2",
