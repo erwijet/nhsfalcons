@@ -77,7 +77,7 @@ function publish() {
 
         await $.ajax({
             method: 'POST',
-            url: 'http://localhost:2020/dtb/insert',
+            url: 'http://api.nhsfalcons.com/dtb/insert',
             data: {
                 auth: token,
                 name,

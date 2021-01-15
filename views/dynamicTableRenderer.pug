@@ -16,7 +16,7 @@ html
             const name = $('#body').attr('name');
             const { js } = JSON.parse(await $.ajax({
                 method: 'GET',
-                url: 'http://localhost:2020/dtb/find/' + name
+                url: 'http://api.nhsfalcons.com/dtb/find/' + name
             }))[0];
 
             const { docs } = await $.ajax({
