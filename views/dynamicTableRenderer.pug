@@ -1,0 +1,28 @@
+doctype html
+html
+    head
+        style.
+            table {
+                border-collapse: collapse
+            }
+            table, th, td {
+                border: 1px solid black
+            }
+    body#body(name=name)
+    script(src='/js/buildTableHtmlFromScript.js')
+    script(src='https://code.jquery.com/jquery-3.5.0.min.js')
+    script.
+        (async () => {
+            const name = $('#body').attr('name');
+            const { js } = JSON.parse(await $.ajax({
+                method: 'GET',
+                url: 'http://localhost:2020/dtb/find/' + name
+            }))[0];
+
+            const { docs } = await $.ajax({
+                method: 'POST',
+                url: 'http://api.nhsfalcons.com/member/query'
+            });
+
+            $('#body').html(buildTableHTMLFromScript(docs, js));
+        })();

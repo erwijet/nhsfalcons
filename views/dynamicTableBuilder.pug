@@ -1,0 +1,70 @@
+extends layout
+block append css
+    style.
+        /* Define custom scroll bar */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            background-color: #272822;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #555;
+        }
+block body
+    .box(style='margin: 2%')
+        .level
+            .level-left
+                .level-item
+                    a.button.is-dark.is-outlined(href='/admin/db')
+                        span.icon
+                            i.fas.fa-database
+                        p Go to Query Builder
+                .level-item
+                    .button.is-dark.is-outlined(onClick='testScript();')
+                        span.icon
+                            i.fas.fa-vial
+                        p Test Script
+            .level-right
+                .level-item
+                    .button.is-success(onClick='showModal();')
+                        span.icon
+                            i.fas.fa-play
+                        p Export Table Script
+    .columns
+        .column.is-half 
+            .box(style='margin: 2%; margin-right: 0px; background-color: #272822')
+                #editor(style='height: 300px')
+        .column.is-half
+            .box#output(style='margin: 2%; margin-left: 0px')
+
+
+
+    //- Modal for Exporting the Table Script
+    .modal#export-modal
+        .modal-background(onClick='hideModal();')
+        .modal-card
+            header.modal-card-head
+                p.modal-card-title Export Dynamic Table
+            section.modal-card-body
+                .field.has-addons
+                    .control
+                        .button.is-static nhsfalcons.com/dtb/
+                    .control.is-expanded
+                        input.input#tableName(type='text', placeholder='table name', onKeyDown='validateTableName();')
+            footer.modal-card-foot
+                .level(style='width: 100%')
+                    .level-left
+                        .level-item
+                            button.button(onClick='hideModal();') Cancel
+                    .level-right
+                        .level-item
+                            button.button.is-right.is-success#btnPublish(onClick='publish();')
+                                span.icon
+                                    i.fas.fa-check-circle
+                                span Export &amp Publish
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/ace/1.4.5/ace.js', type='text/javascript', charset='utf-8')
+    script(src='/js/buildTableHtmlFromScript.js')
+    script(src='/js/dynamicTableBuilder.js')

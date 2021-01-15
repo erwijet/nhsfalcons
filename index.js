@@ -194,6 +194,15 @@ app.get('/rdr/:name', (req, res) => {
     })();
 });
 
+app.get('/dt/:tableName', (req, res) => {
+    if (req.cookies.nhsfalconsauth != today()) {
+        res.redirect('/auth?redirect=/dt/' + req.params.tableName);
+        return;
+    }
+
+    res.render('dynamicTableRenderer', { name: req.params.tableName });
+});
+
 app.get('/advisor', (req, res) => {
     if (req.cookies.nhsfalconsadvauth != advauth())
         res.redirect('/auth?specialAuth=adv&redirect=/advisor');
@@ -212,6 +221,11 @@ app.get('/admin/db', (req, res) => {
 });
 
 app.get('/admin/dtb', (req, res) => {
+    if (req.cookies.nhsfalconsauth != today()) {
+        res.redirect('/auth?redirect=/admin/dtb');
+        return;
+    }
+
     res.render('dynamicTableBuilder');
 });
 
@@ -350,7 +364,7 @@ function nextVideoId() {
 
 // app.use(express.json()); // use JSON body parsing
 
-app.get('/misc/jsmin', (req, res) => {
+app.post('/misc/jsmin', (req, res) => {
     (async () => {
     const config = {
         compress: {
@@ -377,7 +391,7 @@ app.get('/misc/jsmin', (req, res) => {
       };
       
       const code = req.body.code;
-    
+      console.log(code);
 
       // Minify the code with Terser
       const minified = await minify(code, config);
