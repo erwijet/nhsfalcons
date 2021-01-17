@@ -63,7 +63,7 @@ function publish() {
         return;
 
     (async () => {
-        const token = globalThis.document.cookie.split('; nhsfalconsauth=')[1].split('=')[1];
+        const token = globalThis.document.cookie.split('nhsfalconsauth=')[1]; // extract auth token
         console.log(token);
 
         // get minified js
